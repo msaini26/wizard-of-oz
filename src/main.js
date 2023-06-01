@@ -1,5 +1,9 @@
 'use strict'
 
+let cursors;
+const brickWidth = 193;
+const brickHeight = 23;
+
 let config = {
     type: Phaser.AUTO,
     width: 800,
@@ -18,7 +22,7 @@ let config = {
         }
     },
 
-    scene: [Play],
+    scene: [Tornado, PowerUp, Play],
 }
 
 let game = new Phaser.Game(config) // create phaser game
