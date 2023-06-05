@@ -94,7 +94,7 @@ class Tornado extends Phaser.Scene {
         });
 
         //creating idle animation (when the player isn't moving)
-        this.idle = this.anims.create({
+        this.anims.create({
             key: 'idle',
             frameRate: 15,
             frames: this.anims.generateFrameNames("idle", { 
@@ -117,7 +117,7 @@ class Tornado extends Phaser.Scene {
         this.score = 0;
 
         //creating walking animation (when player moves left and right)
-        this.walk = this.anims.create({
+        this.anims.create({
             key: 'run',
             frameRate: 15,
             frames: this.anims.generateFrameNames("run", { 
@@ -151,6 +151,13 @@ class Tornado extends Phaser.Scene {
 
         //check collision of player and the starting platform
         this.physics.add.collider(this.player, this.startGround);
+
+        this.time.delayedCall(10000, () => {
+            this.scene.start('powerUpScene');
+            // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            // this.gameOver = true;
+        }, null, this);
 
         //configuration to paint the score and high score on the screen
         // let scoreConfig = {
@@ -252,7 +259,7 @@ class Tornado extends Phaser.Scene {
     increaseSpeed() {
         //increase speed of platforms to make it increasingly harder to play
         if(this.platformSpeed >= this.platformSpeedMax){ //increase speed of platforms until it reaches max
-            this.platformSpeed -= 30; 
+            this.platformSpeed -= 80; 
         }
     }
 
