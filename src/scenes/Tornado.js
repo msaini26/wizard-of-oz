@@ -152,7 +152,7 @@ class Tornado extends Phaser.Scene {
         //check collision of player and the starting platform
         this.physics.add.collider(this.player, this.startGround);
 
-        this.time.delayedCall(10000, () => {
+        this.time.delayedCall(30000, () => {
             this.scene.start('powerUpScene');
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
