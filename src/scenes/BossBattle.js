@@ -1,6 +1,6 @@
-class PowerUp extends Phaser.Scene {
+class BossBattle extends Phaser.Scene {
     constructor() {
-        super('powerUpScene');
+        super('bossBattleScene');
     }
 
     // preload assets
@@ -12,8 +12,8 @@ class PowerUp extends Phaser.Scene {
 
         this.load.tilemapTiledJSON('YellowBrickJSON', 'YellowBrick.json');
 
-        // this.load.animation("run", "tornadoScene");
-        // this.load.animation("idle", "tornadoScene");
+         // load spritesheet
+         this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
     // create background and game elements
@@ -85,6 +85,41 @@ class PowerUp extends Phaser.Scene {
         //     repeat: -1
         // });
 
+        // enemy creation
+         //animation config - witch
+         this.anims.create({
+            key: 'witch-moving',
+            frames: this.anims.generateFrameNumbers('witch-walking'),
+            frameRate: 6,
+            repeat: -1,
+        });  
+
+        this.witch = this.physics.add.sprite(350, 520, 'witch').setScale(2.5);
+        this.witch.body.allowGravity = false;
+
+        this.witch.play('witch-moving');
+
+        this.player.body.onOverlap = true;
+        this.physics.add.overlap(this.player, this.witch); // collision between witch and player
+    
+        this.physics.world.on('overlap', (player, witch) => {
+            witch.destroy();
+            // TODO: insert witch melting animation
+        }); 
+        
+        this.witch_one = this.physics.add.sprite(550, 520, 'witch').setScale(2.5);
+        this.witch_one.body.allowGravity = false;
+
+        this.witch_one.play('witch-moving');
+
+        this.player.body.onOverlap = true;
+        this.physics.add.overlap(this.player, this.witch_one); // collision between witch and player
+    
+        this.physics.world.on('overlap', (player, witch_one) => {
+            witch_one.destroy();
+            // TODO: insert witch melting animation
+        });
+
         cursors = this.input.keyboard.createCursorKeys();
 
 
@@ -102,7 +137,7 @@ class PowerUp extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        this.add.text(game.config.width/2, game.config.height/2, 'power up scene', titleConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'boss battle scene', titleConfig).setOrigin(0.5);
     }
 
     // updates every frame
@@ -145,19 +180,5 @@ class PowerUp extends Phaser.Scene {
 	    	this.jumping = false; //set jumping to false
             // this.sound.play('boing'); //play boing sound effect
 	    }
-
-        // move to next scene
-        if (this.outsideBounds()) {
-            this.scene.start('bossBattleScene');
-        }
-    }
-
-    outsideBounds() {
-        //checks if player has fallen outside bounds of screen
-        if(this.player.x > game.config.width - 40){
-                return true; //return true if player is outside
-        } else{
-            return false; //return false if player is inside bounds
-        }
     }
 }
