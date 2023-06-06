@@ -31,7 +31,6 @@ class BossBattle extends Phaser.Scene {
         this.platformSpeed = -200;
         this.platformSpeedMax = -700;
 
-
         //creating tilemap
         const map = this.add.tilemap('battleJSON');
 
@@ -49,17 +48,6 @@ class BossBattle extends Phaser.Scene {
         //spawn location = where player starts
         const playerSpawn = map.findObject('Spawn', obj => obj.name === 'Spawn');
 
-        //creating idle animation (when the player isn't moving)
-        // this.idle = this.anims.create({
-        //     key: 'idle',
-        //     frameRate: 15,
-        //     frames: this.anims.generateFrameNames("idle", { 
-        //         prefix: 'sprite',
-        //         start: 1, 
-        //         end: 11 }),
-        //     repeat: -1
-        // });
-
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
 
@@ -68,37 +56,15 @@ class BossBattle extends Phaser.Scene {
         this.player.body.checkCollision.left = false;
         this.player.body.checkCollision.right = false;
 
-        // this.player.animations.add('run');
-
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
 
         //physics collision
         this.physics.add.collider(this.player, terrainLayer);
 
-        //creating walking animation (when player moves left and right)
-        // this.walk = this.anims.create({
-        //     key: 'run',
-        //     frameRate: 15,
-        //     frames: this.anims.generateFrameNames("run", { 
-        //         prefix: 'sprite',
-        //         start: 1, 
-        //         end: 12 }),
-        //     repeat: -1
-        // });
-
-        // enemy creation
-         //animation config - witch
-        //  this.anims.create({
-        //     key: 'witch-moving',
-        //     frames: this.anims.generateFrameNumbers('witch-walking'),
-        //     frameRate: 6,
-        //     repeat: -1,
-        // });  
-
         this.anims.create({
             key: 'witch-moving',
-            frameRate: 15,
+            frameRate: 6,
             frames: this.anims.generateFrameNames("witch-walking", { 
                 prefix: 'sprite',
                 start: 5, 
@@ -111,13 +77,32 @@ class BossBattle extends Phaser.Scene {
 
         this.witch.play('witch-moving');
 
-        this.player.body.onOverlap = true;
-        this.physics.add.overlap(this.player, this.witch); // collision between witch and player
+
+       
+        // this.p1.body.setAccelerationX(-this.ACCELERATION); //make player move left
+        // this.p1.setFlip(true, false); //flip the animation so it faces left
+
+        // if (this.witch.body.velocity) { 
+        //     this.avocado.body.setVelocityX(-this.VELOCITY); // move character left
+        //     this.avocado.setFlip(true, false); // flip animation when moving left
+        //     this.avocado.anims.play('jump', true); // play jump animation
+        // } else if (cursors.right.isDown) { 
+        //     this.avocado.body.setVelocityX(this.VELOCITY); // move character right
+        //     this.avocado.resetFlip(); // flip avocado back to where it was
+        //     this.avocado.anims.play('jump', true); // play jump animation
+        // }
+
+        // this.player.body.onOverlap = true;
+
+        // player runs into the witch
+        // this.physics.add.overlap(this.player, this.witch); // collision between witch and player
     
-        this.physics.world.on('overlap', (player, witch) => {
-            witch.destroy();
-            // TODO: insert witch melting animation
-        }); 
+        // this.physics.world.on('overlap', (player, witch) => {
+        //     witch.destroy();
+        //     // TODO: insert witch melting animation
+        // }); 
+
+
         
         this.witch_one = this.physics.add.sprite(550, 520, 'witch').setScale(2.5);
         this.witch_one.body.allowGravity = false;
@@ -189,5 +174,21 @@ class BossBattle extends Phaser.Scene {
 	    	this.jumping = false; //set jumping to false
             // this.sound.play('boing'); //play boing sound effect
 	    }
+
+        // this.physics.world.on('overlap', (player, witch) => {
+        //     witch.destroy();
+        //     // this.enemy_tracks_player().stop();
+        //     // TODO: insert witch melting animation
+        // });   
+        
+        
+        // enemy follows player
+        this.enemy_tracks_player();
+               
+    }
+
+    // make sure enemy moves towards the player
+    enemy_tracks_player() {
+        this.physics.moveToObject(this.witch, this.player, 50);
     }
 }
