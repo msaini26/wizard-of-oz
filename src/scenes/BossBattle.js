@@ -142,8 +142,7 @@ class BossBattle extends Phaser.Scene {
 
     // updates every frame
     update() {
-        //adjusting acceleration, drag, and animation to match player input
-        if(cursors.left.isDown) { //if player presses left arrow key
+        if(cursors.left.isDown){
             this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
             this.player.setFlip(true, false); //flip the animation so it faces left
             this.player.anims.play('run', true); //play the walking animation
@@ -157,11 +156,9 @@ class BossBattle extends Phaser.Scene {
             this.player.anims.play('idle', true); //play idle animation
         }
 
-        //check if player is touching any platform
-        this.player.onGround = this.player.body.touching.down;
 
         //if the player is on a platform
-	    if(this.player.onGround) {
+	    if(this.player.body.blocked.down) {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {

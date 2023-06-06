@@ -172,9 +172,9 @@ class PowerUp extends Phaser.Scene {
     // updates every frame
     update() {
 
-        if(this.p1.x >= (game.config.width - 50)){
-            console.log("next level");
-        }
+        // if(this.p1.x >= (game.config.width - 50)){
+        //     console.log("next level");
+        // }
 
 
         if(cursors.left.isDown){
@@ -221,7 +221,7 @@ class PowerUp extends Phaser.Scene {
 
     outsideBounds() {
         //checks if player has fallen outside bounds of screen
-        if(this.player.x > game.config.width - 40){
+        if(this.p1.x > game.config.width - 40){
                 return true; //return true if player is outside
         } else{
             return false; //return false if player is inside bounds
