@@ -14,6 +14,8 @@ class BossBattle extends Phaser.Scene {
 
          // load spritesheet
          this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+         this.load.atlas('witch-walking', './witch.png', './sprites.json'); // import witch walking texture atlas
+
     }
 
     // create background and game elements
