@@ -8,9 +8,9 @@ class BossBattle extends Phaser.Scene {
         this.load.path = '/assets/'; //set loading path
 
         this.load.image('terrainImage', 'Terrain.png');
-        this.load.image('yellowImage', 'Yellow.png');
+        this.load.image('purpleImage', 'Purple.png');
 
-        this.load.tilemapTiledJSON('YellowBrickJSON', 'YellowBrick.json');
+        this.load.tilemapTiledJSON('battleJSON', 'BattleField.json');
 
          // load spritesheet
          this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
@@ -31,11 +31,11 @@ class BossBattle extends Phaser.Scene {
 
 
         //creating tilemap
-        const map = this.add.tilemap('YellowBrickJSON');
+        const map = this.add.tilemap('battleJSON');
 
         //adding tileset images
         const terrainTileSet = map.addTilesetImage('Terrain', 'terrainImage');
-        const backgroundTileSet = map.addTilesetImage('Yellow', 'yellowImage');
+        const backgroundTileSet = map.addTilesetImage('Purple', 'purpleImage');
 
         //creating layers
         const bgLayer = map.createLayer('Background', backgroundTileSet, 0, 0);
