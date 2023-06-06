@@ -20,7 +20,7 @@ class Tornado extends Phaser.Scene {
 
 
         //loading background
-        this.load.image('background','swamp.png');
+        this.load.image('background','background2.png');
 
         this.load.image("brick", "brick.png");
 
@@ -64,7 +64,7 @@ class Tornado extends Phaser.Scene {
         // this.blobBackgroundMusic.play(blobBackgroundMusicConfig); // play background music based on configurations
 
         //adding background tile
-        this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0).setScale(1.5);
+        this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
 
 
         //keeps track of other colored platforms (different from player color)

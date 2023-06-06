@@ -18,21 +18,12 @@ class PowerUp extends Phaser.Scene {
 
         this.load.image('coin', 'coin.png');
 
-        //load each atlas for player animations
-        // this.load.atlas("run", "./player/run.png", "./player/run.json");
-        // this.load.atlas("hit", "./player/hit.png", "./player/hit.json");
-        // this.load.atlas("idle", "./player/idle.png", "./player/idle.json");
-        // this.load.atlas("wallJump", "./player/wallJump.png", "./player/wallJump.json");
-        // this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
+        this.load.atlas("chest", "chest.png", "chest.json");
 
-        // this.load.animation("run", "tornadoScene");
-        // this.load.animation("idle", "tornadoScene");
     }
 
     // create background and game elements
     create() {
-        // this.load.animation("run", "tornadoScene");
-        // this.load.animation("idle", "tornadoScene");
         this.ACCELERATION = 600;
         this.DRAG = 700; 
         this.JUMP_VELOCITY = -700;
@@ -58,96 +49,127 @@ class PowerUp extends Phaser.Scene {
         terrainLayer.setCollisionByProperty({collides: true});
 
         // define a render debug so we can see the tilemap's collision bounds
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
-        terrainLayer.renderDebug(debugGraphics, {
-            tileColor: null,    // color of non-colliding tiles
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),    // color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255)                // color of colliding face edges
-        });
+        // const debugGraphics = this.add.graphics().setAlpha(0.75);
+        // terrainLayer.renderDebug(debugGraphics, {
+        //     tileColor: null,    // color of non-colliding tiles
+        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),    // color of colliding tiles
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)                // color of colliding face edges
+        // });
 
         //spawn location = where player starts
         const playerSpawn = map.findObject('Spawn', obj => obj.name === 'Spawn');
 
-        //creating idle animation (when the player isn't moving)
-        // this.anims.remove('idle');
-        // this.anims.create({
-        //     key: 'idle',
-        //     frameRate: 15,
-        //     frames: this.anims.generateFrameNames("idle", { 
-        //         prefix: 'sprite',
-        //         start: 1, 
-        //         end: 11 }),
-        //     repeat: -1
-        // });
-
         //adding player
-        this.p1 = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
-        this.p1.anims.play('idle', true); 
-
-        //setting it so only the bottom of player checks for collision
-        this.p1.body.checkCollision.up = false; 
-        this.p1.body.checkCollision.left = false;
-        this.p1.body.checkCollision.right = false;
-
-        // this.player.animations.add('run');
+        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
+        this.player.anims.play('idle', true); 
 
         //setting collision
-        this.p1.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
+        this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
+
+        this.anims.create({
+            key: 'chest1',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames("chest", { 
+                prefix: 'sprite',
+                start: 6, 
+                end: 10 }),
+            repeat: 0
+        });
+
+        this.chest1 = this.physics.add.sprite(200, 250, 'chest', 'sprite1').setScale(4);
+        // this.chest1.anims.play("chest1");
+        // Change the size of the bounding box.
+        this.chest1.setSize(30, 30);
+        // Change the location of the bounding box.
+        this.chest1.setOffset(1, 2);
+        this.chest1.body.immovable = true; // don't move coin
+        this.chest1.body.allowGravity = false; // don't fall coin
+
+        this.chest1.body.checkCollision.up = false; 
+        this.chest1.body.checkCollision.left = false;
+        this.chest1.body.checkCollision.right = false;
+
+
+
+        this.anims.create({
+            key: 'chest2',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames("chest", { 
+                prefix: 'sprite',
+                start: 16, 
+                end: 20 }),
+            repeat: 0
+        });
+
+        this.chest2 = this.physics.add.sprite(350, 250, 'chest', 'sprite11').setScale(4);
+        // this.chest2.anims.play("chest2");
+        // Change the size of the bounding box.
+        this.chest2.setSize(30, 30);
+        // Change the location of the bounding box.
+        this.chest2.setOffset(1, 2);
+        this.chest2.body.immovable = true; // don't move coin
+        this.chest2.body.allowGravity = false; // don't fall coin
+
+        this.chest2.body.checkCollision.up = false; 
+        this.chest2.body.checkCollision.left = false;
+        this.chest2.body.checkCollision.right = false;
+
+
+
+        this.anims.create({
+            key: 'chest3',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames("chest", { 
+                prefix: 'sprite',
+                start: 26, 
+                end: 30 }),
+            repeat: 0
+        });
+
+        this.chest3 = this.physics.add.sprite(500, 250, 'chest', 'sprite21').setScale(4);
+        // this.chest3.anims.play("chest3");
+        // Change the size of the bounding box.
+        this.chest3.setSize(30, 30);
+        // Change the location of the bounding box.
+        this.chest3.setOffset(1, 2);
+        this.chest3.body.immovable = true; // don't move coin
+        this.chest3.body.allowGravity = false; // don't fall coin
+
+        this.chest3.body.checkCollision.up = false; 
+        this.chest3.body.checkCollision.left = false;
+        this.chest3.body.checkCollision.right = false;
+
+
+
+        this.anims.create({
+            key: 'chest4',
+            frameRate: 15,
+            frames: this.anims.generateFrameNames("chest", { 
+                prefix: 'sprite',
+                start: 36, 
+                end: 40 }),
+            repeat: 0
+        });
+
+        this.chest4 = this.physics.add.sprite(650, 250, 'chest', 'sprite31').setScale(4);
+        // this.chest4.anims.play("chest4");
+        // Change the size of the bounding box.
+        this.chest4.setSize(30, 30);
+        // Change the location of the bounding box.
+        this.chest4.setOffset(1, 2);
+        this.chest4.body.immovable = true; // don't move coin
+        this.chest4.body.allowGravity = false; // don't fall coin
+
+        this.chest4.body.checkCollision.up = false; 
+        this.chest4.body.checkCollision.left = false;
+        this.chest4.body.checkCollision.right = false;
+
+        this.chestPlayed = false;
+
 
         //physics collision
-        this.physics.add.collider(this.p1, terrainLayer);
-
-        let line = this.add.line(200, 150,100,100,500,100,0xff0000);
-
-        // create coins group
-        this.coin_one = this.physics.add.sprite(line.x, line.y + 100, 'coin'); // create coin
-        this.coin_one.body.immovable = true; // don't move coin
-        this.coin_one.body.allowGravity = false; // don't fall coin
-
-        this.coin_two = this.physics.add.sprite(line.x + 150, line.y + 100, 'coin'); // create coin
-        this.coin_two.body.immovable = true; // don't move coin
-        this.coin_two.body.allowGravity = false; // don't fall coin
-        
-        this.coin_three = this.physics.add.sprite(line.x + 300, line.y + 100, 'coin'); // create coin
-        this.coin_three.body.immovable = true; // don't move coin
-        this.coin_three.body.allowGravity = false; // don't fall coin
-
-        // Phaser.Actions.PlaceOnLine(this.coins, line);
-        line.alpha = 0; // hide coin line
-
-        this.p1.body.onOverlap = true;
-        this.physics.add.overlap(this.p1, this.coin_one); // collision between coin and player
-        this.physics.add.overlap(this.p1, this.coin_two); // collision between coin and player
-        this.physics.add.overlap(this.p1, this.coin_three); // collision between coin and player
-
-
-        this.physics.world.on('overlap', (player, coin_one) => {
-            coin_one.destroy();
-            // this.p1Score += 1;
-        });
-
-        this.physics.world.on('overlap', (player, coin_two) => {
-            coin_two.destroy();
-            // this.p1Score += 1;
-        });
-
-        this.physics.world.on('overlap', (player, coin_three) => {
-            coin_three.destroy();
-            // this.p1Score += 1;
-        });
-
-
-        // this.anims.remove('run');
-        //creating walking animation (when player moves left and right)
-        // this.anims.create({
-        //     key: 'run',
-        //     frameRate: 15,
-        //     frames: this.anims.generateFrameNames("run", { 
-        //         prefix: 'sprite',
-        //         start: 1, 
-        //         end: 12 }),
-        //     repeat: -1
-        // });
+        this.physics.add.collider(this.player, terrainLayer);
+        // this.physics.add.collider(this.player, this.chest1);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -176,33 +198,34 @@ class PowerUp extends Phaser.Scene {
         //     console.log("next level");
         // }
 
+        this.updateChest();
 
         if(cursors.left.isDown){
-            this.p1.body.setAccelerationX(-this.ACCELERATION); //make player move left
-            this.p1.setFlip(true, false); //flip the animation so it faces left
-            this.p1.anims.play('run', true); //play the walking animation
+            this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
+            this.player.setFlip(true, false); //flip the animation so it faces left
+            this.player.anims.play('run', true); //play the walking animation
         } else if(cursors.right.isDown) { //if player presses right arrow key
-            this.p1.body.setAccelerationX(this.ACCELERATION); //move player right
-            this.p1.resetFlip(); //reset animation to face right
-            this.p1.anims.play('run', true); //play the walking animation
+            this.player.body.setAccelerationX(this.ACCELERATION); //move player right
+            this.player.resetFlip(); //reset animation to face right
+            this.player.anims.play('run', true); //play the walking animation
         } else {
-            this.p1.body.setAccelerationX(0); // set acceleration to 0 so DRAG will take over
-            this.p1.body.setDragX(this.DRAG); //drag to stop player from moving
-            this.p1.anims.play('idle', true); //play idle animation
+            this.player.body.setAccelerationX(0); // set acceleration to 0 so DRAG will take over
+            this.player.body.setDragX(this.DRAG); //drag to stop player from moving
+            this.player.anims.play('idle', true); //play idle animation
         }
 
 
         //if the player is on a platform
-	    if(this.p1.body.blocked.down) {
+	    if(this.player.body.blocked.down) {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
-            this.p1.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
+            this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
         //if up arrow key is pressed and we have not reached max jumps yet
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
-	        this.p1.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
+	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
 	    } 
 
@@ -221,10 +244,69 @@ class PowerUp extends Phaser.Scene {
 
     outsideBounds() {
         //checks if player has fallen outside bounds of screen
-        if(this.p1.x > game.config.width - 40){
+        if(this.player.x > game.config.width - 40){
                 return true; //return true if player is outside
         } else{
             return false; //return false if player is inside bounds
         }
+    }
+
+    updateChest() {
+        this.physics.add.collider(this.player, this.chest1, (player, chest) =>{
+            if(!this.chestPlayed){
+                this.chest2.destroy();
+                this.chest3.destroy();
+                this.chest4.destroy();
+
+                this.time.delayedCall(500, () => {
+                    chest.anims.play("chest1");
+                }, null, this);
+
+                this.chestPlayed = true;
+            }
+        });
+
+        this.physics.add.collider(this.player, this.chest2, (player, chest) =>{
+            if(!this.chestPlayed){
+                this.chest1.destroy();
+                this.chest3.destroy();
+                this.chest4.destroy();
+
+                this.time.delayedCall(500, () => {
+                    chest.anims.play("chest2");
+                }, null, this);
+
+                this.chestPlayed = true;
+            }
+        });
+
+        this.physics.add.collider(this.player, this.chest3, (player, chest) =>{
+            if(!this.chestPlayed){
+                this.chest1.destroy();
+                this.chest2.destroy();
+                this.chest4.destroy();
+
+                this.time.delayedCall(500, () => {
+                    chest.anims.play("chest3");
+                }, null, this);
+
+                this.chestPlayed = true;
+            } 
+        });
+
+        this.physics.add.collider(this.player, this.chest4, (player, chest) =>{
+            if(!this.chestPlayed){
+                this.chest1.destroy();
+                this.chest2.destroy();
+                this.chest3.destroy();
+
+                this.time.delayedCall(500, () => {
+                    chest.anims.play("chest4");
+                }, null, this);
+
+                this.chestPlayed = true;
+            }
+        });
+        
     }
 }
