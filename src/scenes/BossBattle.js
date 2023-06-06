@@ -13,8 +13,8 @@ class BossBattle extends Phaser.Scene {
         this.load.tilemapTiledJSON('battleJSON', 'BattleField.json');
 
          // load spritesheet
-         this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
-         this.load.atlas('witch-walking', './witch.png', './sprites.json'); // import witch walking texture atlas
+        //  this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+         this.load.atlas('witch-walking', 'witch.png', 'sprites.json'); // import witch walking texture atlas
 
     }
 
@@ -89,12 +89,22 @@ class BossBattle extends Phaser.Scene {
 
         // enemy creation
          //animation config - witch
-         this.anims.create({
+        //  this.anims.create({
+        //     key: 'witch-moving',
+        //     frames: this.anims.generateFrameNumbers('witch-walking'),
+        //     frameRate: 6,
+        //     repeat: -1,
+        // });  
+
+        this.anims.create({
             key: 'witch-moving',
-            frames: this.anims.generateFrameNumbers('witch-walking'),
-            frameRate: 6,
-            repeat: -1,
-        });  
+            frameRate: 15,
+            frames: this.anims.generateFrameNames("witch-walking", { 
+                prefix: 'sprite',
+                start: 5, 
+                end: 8 }),
+            repeat: -1
+        });
 
         this.witch = this.physics.add.sprite(350, 520, 'witch').setScale(2.5);
         this.witch.body.allowGravity = false;
