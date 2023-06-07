@@ -23,6 +23,7 @@ class Tornado extends Phaser.Scene {
         this.load.image('background','background2.png');
 
         this.load.image("brick", "brick.png");
+        
 
         //loading boba powerup
         // this.load.image('boba','boba.png');

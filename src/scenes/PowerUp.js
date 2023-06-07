@@ -20,6 +20,10 @@ class PowerUp extends Phaser.Scene {
 
         this.load.atlas("chest", "chest.png", "chest.json");
 
+        this.load.atlas("friends", "friends.png", "friends.json");
+        this.load.atlas("monkey", "monkey.png", "monkey.json");
+        this.load.atlas("lion", "lion.png", "lion.json");
+
     }
 
     // create background and game elements
@@ -167,6 +171,86 @@ class PowerUp extends Phaser.Scene {
         this.chestPlayed = false;
 
 
+        this.anims.create({
+            key: 'tincan',
+            frameRate: 15,
+            frames: this.anims.generateFrameNames("friends", { 
+                prefix: 'sprite',
+                start: 9, 
+                end: 16 }),
+            repeat: 0
+        });
+
+        this.power = this.physics.add.sprite(620, 240, 'friends', 'sprite13').setScale(4);
+        this.power.body.immovable = true; // don't move coin
+        this.power.body.allowGravity = false; 
+
+        this.power.visible = false;
+
+
+
+        this.anims.create({
+            key: 'scarecrow',
+            frameRate: 15,
+            frames: this.anims.generateFrameNames("friends", { 
+                prefix: 'sprite',
+                start: 73, 
+                end: 80 }),
+            repeat: 0
+        });
+
+        // this.scarecrow = this.physics.add.sprite(470, 240, 'friends', 'sprite77').setScale(4);
+        // this.scarecrow.body.immovable = true; // don't move coin
+        // this.scarecrow.body.allowGravity = false; 
+
+        // this.scarecrow.anims.play('scarecrow');
+
+        // this.scarecrow.visible = false;
+
+        
+        this.anims.create({
+            key: 'monkey',
+            frameRate: 3,
+            frames: this.anims.generateFrameNames("monkey", { 
+                prefix: 'sprite',
+                start: 1, 
+                end: 4 }),
+            repeat: 0
+        });
+
+        // this.monkey = this.physics.add.sprite(320, 230, 'monkey', 'sprite1').setScale(4);
+        // this.monkey.body.immovable = true; // don't move coin
+        // this.monkey.body.allowGravity = false; 
+
+        // this.monkey.anims.play('monkey');
+
+        // this.monkey.visible = false;
+
+
+        this.anims.create({
+            key: 'lion',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames("lion", { 
+                prefix: 'lion',
+                start: 1, 
+                end: 4 }),
+            repeat: 0
+        });
+
+        // this.lion = this.physics.add.sprite(170, 230, 'lion', 'lion1').setScale(4);
+        // this.lion.body.immovable = true; // don't move coin
+        // this.lion.body.allowGravity = false; 
+
+        // this.lion.anims.play('lion');
+
+        // this.monkey.visible = false;
+
+        this.powerlist = ['tincan', 'lion', 'scarecrow', 'monkey', 'monkey'];
+        this.powerAnim = Phaser.Utils.Array.GetRandom(this.powerlist);
+        this.powerFront = 0;
+
+
+
         //physics collision
         this.physics.add.collider(this.player, terrainLayer);
         // this.physics.add.collider(this.player, this.chest1);
@@ -262,6 +346,10 @@ class PowerUp extends Phaser.Scene {
                     chest.anims.play("chest1");
                 }, null, this);
 
+                chest.on('animationcomplete', () => {
+                    this.setAnimation(170);
+                });
+
                 this.chestPlayed = true;
             }
         });
@@ -275,6 +363,10 @@ class PowerUp extends Phaser.Scene {
                 this.time.delayedCall(500, () => {
                     chest.anims.play("chest2");
                 }, null, this);
+
+                chest.on('animationcomplete', () => {
+                    this.setAnimation(320);
+                });
 
                 this.chestPlayed = true;
             }
@@ -290,6 +382,10 @@ class PowerUp extends Phaser.Scene {
                     chest.anims.play("chest3");
                 }, null, this);
 
+                chest.on('animationcomplete', () => {
+                    this.setAnimation(470);
+                });
+
                 this.chestPlayed = true;
             } 
         });
@@ -304,9 +400,35 @@ class PowerUp extends Phaser.Scene {
                     chest.anims.play("chest4");
                 }, null, this);
 
+                chest.on('animationcomplete', () => {
+                    this.setAnimation(620);
+                });
+
                 this.chestPlayed = true;
             }
         });
         
+    }
+
+    getPowerFront(){
+        if(this.powerAnim === 'tincan'){
+            this.powerFront = 4;
+        } else if(this.powerAnim === 'scarecrow'){
+            this.powerFront = 4;
+        } else if(this.powerAnim === 'lion'){
+            this.powerFront = 0;
+        } else if(this.powerAnim === 'monkey'){
+            this.powerFront = 1;
+        }
+    }
+
+    setAnimation(x){
+        this.getPowerFront();
+        this.power.x = x;
+        this.power.visible = true;
+        this.power.anims.play(this.powerAnim);
+        this.power.on('animationcomplete', () => {
+            this.power.anims.pause(this.power.anims.currentAnim.frames[this.powerFront]);
+        });
     }
 }
