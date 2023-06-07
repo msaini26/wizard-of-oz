@@ -72,10 +72,11 @@ class BossBattle extends Phaser.Scene {
             repeat: -1
         });
 
-        this.witch = this.physics.add.sprite(350, 520, 'witch').setScale(2.5);
+        this.witch = this.physics.add.sprite(350, 505, 'witch').setScale(2.5);
         this.witch.body.allowGravity = false;
 
         this.witch.play('witch-moving');
+        this.isDead = false;
 
 
        
@@ -104,7 +105,7 @@ class BossBattle extends Phaser.Scene {
 
 
         
-        this.witch_one = this.physics.add.sprite(550, 520, 'witch').setScale(2.5);
+        this.witch_one = this.physics.add.sprite(550, 505, 'witch').setScale(2.5);
         this.witch_one.body.allowGravity = false;
 
         this.witch_one.play('witch-moving');
@@ -176,9 +177,12 @@ class BossBattle extends Phaser.Scene {
 	    }
 
         // check if player and witch collide
-        if (this.checkCollision(this.player, this.witch)) {
-            this.scene.start('powerUpScene'); // switch scene
-        }
+        // if (this.checkCollision(this.player, this.witch)) {
+        //     // this.scene.start('powerUpScene'); // switch scene
+        //     this.witch.destroy();
+        // }
+
+        this.checkWitchCollision();
         
         // enemy follows player
         this.enemy_tracks_player();
@@ -187,19 +191,19 @@ class BossBattle extends Phaser.Scene {
 
     // make sure enemy moves towards the player
     enemy_tracks_player() {
-        this.physics.moveToObject(this.witch, this.player, 50);
+        if(!this.isDead){
+            this.physics.moveTo(this.witch, this.player.x, this.witch.y, 50);
+        }
     }
 
     // checks for object collisions
     // Inputs: witch, player
     // Output: boolean - based on if collided or not
-    checkCollision(player, witch) {
-        // simple AABB checking
-        if (player.x < witch.x + witch.width && player.x + player.width > witch.x && player.y < witch.y + witch.height && player.height + player.y > witch.y) {
-            return true; // if witch collides with player
-        } else {
-            return false; // no collision
-        }
+    checkWitchCollision() {
+        this.physics.add.collider(this.player, this.witch, (player, witch) =>{
+            witch.destroy();
+            this.isDead = true;
+        });
     }
 
 }
