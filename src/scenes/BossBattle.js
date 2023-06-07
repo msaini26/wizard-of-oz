@@ -175,12 +175,10 @@ class BossBattle extends Phaser.Scene {
             // this.sound.play('boing'); //play boing sound effect
 	    }
 
-        // this.physics.world.on('overlap', (player, witch) => {
-        //     witch.destroy();
-        //     // this.enemy_tracks_player().stop();
-        //     // TODO: insert witch melting animation
-        // });   
-        
+        // check if player and witch collide
+        if (this.checkCollision(this.player, this.witch)) {
+            this.scene.start('powerUpScene'); // switch scene
+        }
         
         // enemy follows player
         this.enemy_tracks_player();
@@ -191,4 +189,17 @@ class BossBattle extends Phaser.Scene {
     enemy_tracks_player() {
         this.physics.moveToObject(this.witch, this.player, 50);
     }
+
+    // checks for object collisions
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkCollision(player, witch) {
+        // simple AABB checking
+        if (player.x < witch.x + witch.width && player.x + player.width > witch.x && player.y < witch.y + witch.height && player.height + player.y > witch.y) {
+            return true; // if witch collides with player
+        } else {
+            return false; // no collision
+        }
+    }
+
 }
