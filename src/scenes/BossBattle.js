@@ -181,7 +181,7 @@ class BossBattle extends Phaser.Scene {
 
         // enemy tracking
         this.walking_witch_tracks_player(); 
-        this.physics.moveTo(this.flyingWitch, this.player.x, this.player.y, 30);
+        this.flying_witch_tracks_player();
                
     }
 
@@ -192,12 +192,12 @@ class BossBattle extends Phaser.Scene {
         }
     }
 
-    //  // make sure flying witch moves towards the player
-    //  flying_witch_tracks_player() {
-    //     if(!this.flyingWitchIsDead && !this.playerIsDead) {
-    //         this.physics.moveTo(this.flyingWitch, this.player, 50);
-    //     }
-    // }
+     // make sure flying witch moves towards the player
+     flying_witch_tracks_player() {
+        if(!this.flyingWitchIsDead && !this.playerIsDead) {
+            this.physics.moveTo(this.flyingWitch, this.player.x, this.player.y, 30);
+        }
+    }
 
     // checks for collision between walking witch and player
     // Inputs: witch, player
