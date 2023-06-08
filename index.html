@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wizard of Oz</title>
   <!-- Import Custom Font -->
-  <link rel="preload" as="font" href="assets/fonts/ducko.ttf" type="font/ttf" crossorigin="anonymous" />
+  <link rel="preload" as="font" href="assets/fonts/joystix.ttf" type="font/ttf" crossorigin="anonymous" />
+  <link rel="preload" as="font" href="assets/fonts/ka1.ttf" type="font/ttf" crossorigin="anonymous" />
 
   <style>
     body {
@@ -14,10 +15,16 @@
     }
 
      /* import duck font */
-     @font-face {
-      font-family: ducko;
-      src: url('./assets/fonts/ducko.ttf');
+    @font-face {
+      font-family: joystix;
+      src: url('./assets/fonts/joystix.ttf');
     }
+
+    @font-face {
+      font-family: ka1;
+      src: url('./assets/fonts/ka1.ttf');
+    }
+
   </style>
 </head>
 <body>
@@ -25,6 +32,7 @@
   <!-- Import JS files -->
   <script src="./lib/phaser.js"></script>
   <!-- <script src="./src/scenes/Menu.js"></script> -->
+  <script src="./src/scenes/Title.js"></script>
   <script src="./src/scenes/Tornado.js"></script>
   <script src="./src/scenes/Play.js"></script>
   <script src="./src/scenes/PowerUp.js"></script>

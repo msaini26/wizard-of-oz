@@ -433,4 +433,20 @@ class PowerUp extends Phaser.Scene {
             this.power.anims.pause(this.power.anims.currentAnim.frames[this.powerFront]);
         });
     }
+
+    setText(){
+        //setting play text configuration
+        // let beginConfig = {
+        //     fontFamily: 'joystix',
+        //     fontSize: '60px',
+        //     color: '#ffbf0f',
+        //     padding: {
+        //         top: 5,
+        //         bottom: 5,
+        //     },
+        // }
+
+        // //adding play text
+        // this.begin = this.add.text(game.config.width/2, game.config.height - 100, 'PLAY', beginConfig).setOrigin(0.5);
+    }
 }
