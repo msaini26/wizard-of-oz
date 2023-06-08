@@ -7,22 +7,24 @@ class PowerUp extends Phaser.Scene {
     preload() {
         this.load.path = '/assets/'; //set loading path
 
-        this.load.image('terrainImage', 'Terrain.png');
-        this.load.image('yellowImage', 'Yellow.png');
+        this.load.image('terrainImage', './terrain/Terrain.png');
+        this.load.image('yellowImage', './tilemaps/Yellow.png');
 
-        this.load.tilemapTiledJSON('YellowBrickJSON', 'YellowBrick.json');
+        this.load.tilemapTiledJSON('YellowBrickJSON', './tilemaps/YellowBrick.json');
 
         //load player movements
         this.load.image("fall", "./player/Fall.png");
         this.load.image("jump", "./player/Jump.png");
 
-        this.load.image('coin', 'coin.png');
+        this.load.image('coin', './powerups/png/coin.png');
 
-        this.load.atlas("chest", "chest.png", "chest.json");
+        // treasure or power up container
+        this.load.atlas("chest", "./powerups/png/chest.png", "./powerups/json/chest.json");
 
-        this.load.atlas("friends", "friends.png", "friends.json");
-        this.load.atlas("monkey", "monkey.png", "monkey.json");
-        this.load.atlas("lion", "lion.png", "lion.json");
+        // treasure options
+        this.load.atlas("friends", "./powerups/png/friends.png", "./powerups/json/friends.json");
+        this.load.atlas("monkey", "./powerups/png/monkey.png", "./powerups//json/monkey.json");
+        this.load.atlas("lion", "./powerups/png/lion.png", "./powerups/json/lion.json");
 
     }
 

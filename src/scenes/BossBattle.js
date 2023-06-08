@@ -7,20 +7,19 @@ class BossBattle extends Phaser.Scene {
     preload() {
         this.load.path = '/assets/'; //set loading path
 
-        this.load.image('terrainImage', 'Terrain.png');
-        this.load.image('purpleImage', 'Purple.png');
+        this.load.image('terrainImage', 'terrain/Terrain.png');
+        this.load.image('purpleImage', 'tilemaps/Purple.png');
 
-        this.load.tilemapTiledJSON('battleJSON', 'BattleField.json');
+        this.load.tilemapTiledJSON('battleJSON', 'tilemaps/BattleField.json');
 
          // load texture atlas
-         this.load.atlas('witch', 'witch.png', 'sprites.json'); // import witch walking texture atlas
+         this.load.atlas('witch', 'enemy/witch.png', 'enemy/witch.json'); // import witch walking texture atlas
 
     }
 
     // create background and game elements
     create() {
-        // this.load.animation("run", "tornadoScene");
-        // this.load.animation("idle", "tornadoScene");
+
         this.ACCELERATION = 600;
         this.DRAG = 700; 
         this.JUMP_VELOCITY = -700;
@@ -49,11 +48,6 @@ class BossBattle extends Phaser.Scene {
 
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
-
-        //setting it so only the bottom of player checks for collision
-        // this.player.body.checkCollision.up = false; 
-        // this.player.body.checkCollision.left = false;
-        // this.player.body.checkCollision.right = false;
 
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
