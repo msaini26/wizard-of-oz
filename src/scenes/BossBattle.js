@@ -136,6 +136,8 @@ class BossBattle extends Phaser.Scene {
         }
 
         this.add.text(game.config.width/2, game.config.height/2, 'boss battle scene', titleConfig).setOrigin(0.5);
+        this.physics.add.collider(this.player, this.witch); // avocado collides with ground
+
     }
 
     // updates every frame
@@ -182,10 +184,24 @@ class BossBattle extends Phaser.Scene {
         //     this.witch.destroy();
         // }
 
-        this.checkWitchCollision();
+        // check if player collides with the witch
+        // this.checkWitchCollision();
         
         // enemy follows player
         this.enemy_tracks_player();
+
+        // player jumped on top on enemy
+        this.player.onEnemy = this.player.body.touching.down; 
+        
+        // check if player jumped on top of enemy
+        if (this.player.onEnemy && !this.isDead) {
+            this.witch.destroy(); // destroy enemy
+            // this.add.text(100, 200, "You eliminated the enemy!"); // temp eliminate enemy text
+        }
+
+        this.checkLeftCollision();
+        this.checkRightCollision();
+        this.checkUpCollision();      
                
     }
 
@@ -204,6 +220,48 @@ class BossBattle extends Phaser.Scene {
             witch.destroy();
             this.isDead = true;
         });
+    }
+
+    // checks if player collides on the left
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkLeftCollision() {
+        if (!this.isDead) {
+            this.player.hitEnemyLeft = this.player.body.touching.left;
+                // player is destroyed by enemy
+            if (this.player.hitEnemyLeft) {
+                this.player.destroy(); // remove player
+                this.scene.restart("bossBattleScene");
+            }
+        }
+    }
+
+    // checks if player collides on the right
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkRightCollision() {
+        if (!this.isDead) {
+            this.player.hitEnemyRight = this.player.body.touching.right;
+                // player is destroyed by enemy
+            if (this.player.hitEnemyRight) {
+                this.player.destroy(); // remove player
+                this.scene.restart("bossBattleScene");
+            }
+        }
+    }
+
+    // checks if player collides on the up side
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkUpCollision() {
+        if (!this.isDead) {
+            this.player.hitEnemyUnder = this.player.body.touching.up;
+                // player is destroyed by enemy
+            if (this.player.hitEnemyUnder) {
+                this.player.destroy(); // remove player
+                this.scene.restart("bossBattleScene");
+            }
+        }
     }
 
 }
