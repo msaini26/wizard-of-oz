@@ -22,7 +22,7 @@ let config = {
         }
     },
 
-    scene: [Tornado, PowerUp, BossBattle,Play],
+    scene: [Tornado, PowerUp, BossBattle, GameOver, Play],
 }
 
 let game = new Phaser.Game(config) // create phaser game
