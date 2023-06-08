@@ -12,9 +12,8 @@ class BossBattle extends Phaser.Scene {
 
         this.load.tilemapTiledJSON('battleJSON', 'BattleField.json');
 
-         // load spritesheet
-        //  this.load.spritesheet('witch-walking', './walking.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
-         this.load.atlas('witch-walking', 'witch.png', 'sprites.json'); // import witch walking texture atlas
+         // load texture atlas
+         this.load.atlas('witch', 'witch.png', 'sprites.json'); // import witch walking texture atlas
 
     }
 
@@ -62,68 +61,39 @@ class BossBattle extends Phaser.Scene {
         //physics collision
         this.physics.add.collider(this.player, terrainLayer);
 
+        // witch moving animation
         this.anims.create({
             key: 'witch-moving',
             frameRate: 6,
-            frames: this.anims.generateFrameNames("witch-walking", { 
+            frames: this.anims.generateFrameNames("witch", { 
                 prefix: 'sprite',
                 start: 5, 
                 end: 8 }),
             repeat: -1
         });
 
+        // witch melting; after witch is killed 
+        this.anims.create({
+            key: 'witch-melting',
+            frameRate: 5,
+            frames: this.anims.generateFrameNames("witch", { 
+                prefix: 'sprite',
+                start: 30, 
+                end: 38 }),
+        });
+
+        // create witch animation
         this.witch = this.physics.add.sprite(350, 505, 'witch').setScale(2.5);
         this.witch.body.immovable = true; 
         this.witch.body.allowGravity = false;
 
         this.witch.anims.play('witch-moving');
-        this.isDead = false;
+        this.isDead = false; // boolean flag for witch
 
 
-        this.playerIsDead = false;
+        this.playerIsDead = false; // boolean flag for player
 
-
-       
-        // this.p1.body.setAccelerationX(-this.ACCELERATION); //make player move left
-        // this.p1.setFlip(true, false); //flip the animation so it faces left
-
-        // if (this.witch.body.velocity) { 
-        //     this.avocado.body.setVelocityX(-this.VELOCITY); // move character left
-        //     this.avocado.setFlip(true, false); // flip animation when moving left
-        //     this.avocado.anims.play('jump', true); // play jump animation
-        // } else if (cursors.right.isDown) { 
-        //     this.avocado.body.setVelocityX(this.VELOCITY); // move character right
-        //     this.avocado.resetFlip(); // flip avocado back to where it was
-        //     this.avocado.anims.play('jump', true); // play jump animation
-        // }
-
-        // this.player.body.onOverlap = true;
-
-        // player runs into the witch
-        // this.physics.add.overlap(this.player, this.witch); // collision between witch and player
-    
-        // this.physics.world.on('overlap', (player, witch) => {
-        //     witch.destroy();
-        //     // TODO: insert witch melting animation
-        // }); 
-
-
-        
-        this.witch_one = this.physics.add.sprite(550, 505, 'witch').setScale(2.5);
-        this.witch_one.body.allowGravity = false;
-
-        this.witch_one.anims.play('witch-moving');
-
-        this.player.body.onOverlap = true;
-        this.physics.add.overlap(this.player, this.witch_one); // collision between witch and player
-    
-        this.physics.world.on('overlap', (player, witch_one) => {
-            witch_one.destroy();
-            // TODO: insert witch melting animation
-        });
-
-        cursors = this.input.keyboard.createCursorKeys();
-
+        cursors = this.input.keyboard.createCursorKeys(); // define cursors for keys
 
         //title text configuration
         let titleConfig = {
@@ -140,7 +110,6 @@ class BossBattle extends Phaser.Scene {
         }
 
         this.add.text(game.config.width/2, game.config.height/2, 'boss battle scene', titleConfig).setOrigin(0.5);
-        // this.physics.add.collider(this.player, this.witch); // avocado collides with ground
 
     }
 
@@ -189,32 +158,11 @@ class BossBattle extends Phaser.Scene {
         }
         
 
-        // check if player and witch collide
-        // if (this.checkCollision(this.player, this.witch)) {
-        //     // this.scene.start('powerUpScene'); // switch scene
-        //     this.witch.destroy();
-        // }
-
-        // check if player collides with the witch
-        // this.checkWitchCollision();
-        
+        // check if player collides with the witch        
         this.checkWitchCollision();
 
         // enemy follows player
-        this.enemy_tracks_player();
-
-        // player jumped on top on enemy
-        // this.player.onEnemy = this.player.body.touching.down; 
-        
-        // check if player jumped on top of enemy
-        // if (this.player.onEnemy && !this.isDead) {
-        //     this.witch.destroy(); // destroy enemy
-        //     // this.add.text(100, 200, "You eliminated the enemy!"); // temp eliminate enemy text
-        // }
-
-        // this.checkLeftCollision();
-        // this.checkRightCollision();
-        // this.checkUpCollision();      
+        this.enemy_tracks_player();    
                
     }
 
@@ -230,61 +178,21 @@ class BossBattle extends Phaser.Scene {
     // Output: boolean - based on if collided or not
     checkWitchCollision() {
         this.physics.add.collider(this.player, this.witch, (player, witch) =>{
-            // console.log("im in collide");
-            if(witch.body.touching.up) { 
-                // console.log("touching down");
-                witch.destroy();
+            if(witch.body.touching.up) {  // player kills the witch
+                this.witch.anims.play('witch-melting'); // make the witch melt
+                this.time.delayedCall(2100, () => {
+                    witch.destroy(); // destroy the witch
+                });
                 this.isDead = true;
             } else {
                 // console.log('player should die');
                 this.player.destroy();
                 this.playerIsDead = true;
             }
-            // witch.destroy();
-            // this.isDead = true;
+
         });
     }
 
-    // checks if player collides on the left
-    // Inputs: witch, player
-    // Output: boolean - based on if collided or not
-    // checkLeftCollision() {
-    //     if (!this.isDead) {
-    //         this.player.hitEnemyLeft = this.player.body.touching.left;
-    //             // player is destroyed by enemy
-    //         if (this.player.hitEnemyLeft) {
-    //             this.player.destroy(); // remove player
-    //             this.scene.restart("bossBattleScene");
-    //         }
-    //     }
-    // }
-
-    // checks if player collides on the right
-    // Inputs: witch, player
-    // Output: boolean - based on if collided or not
-    // checkRightCollision() {
-    //     if (!this.isDead) {
-    //         this.player.hitEnemyRight = this.player.body.touching.right;
-    //             // player is destroyed by enemy
-    //         if (this.player.hitEnemyRight) {
-    //             this.player.destroy(); // remove player
-    //             this.scene.restart("bossBattleScene");
-    //         }
-    //     }
-    // }
-
-    // checks if player collides on the up side
-    // Inputs: witch, player
-    // Output: boolean - based on if collided or not
-    // checkUpCollision() {
-    //     if (!this.isDead) {
-    //         this.player.hitEnemyUnder = this.player.body.touching.up;
-    //             // player is destroyed by enemy
-    //         if (this.player.hitEnemyUnder) {
-    //             this.player.destroy(); // remove player
-    //             this.scene.restart("bossBattleScene");
-    //         }
-    //     }
-    // }
+  
 
 }
