@@ -82,6 +82,17 @@ class BossBattle extends Phaser.Scene {
                 end: 38 }),
         });
 
+        // flying witch 
+        this.anims.create({
+            key: 'witch-flying',
+            frameRate: 5,
+            frames: this.anims.generateFrameNames("witch", { 
+                prefix: 'sprite',
+                start: 39, 
+                end: 42 }),
+            repeat: -1,
+        });
+
         // create witch animation
         this.witch = this.physics.add.sprite(350, 505, 'witch').setScale(2.5);
         this.witch.body.immovable = true; 
@@ -90,10 +101,17 @@ class BossBattle extends Phaser.Scene {
         this.witch.anims.play('witch-moving');
         this.isDead = false; // boolean flag for witch
 
-
         this.playerIsDead = false; // boolean flag for player
 
         cursors = this.input.keyboard.createCursorKeys(); // define cursors for keys
+
+        // create flying witch animation
+        this.flyingWitch = this.physics.add.sprite(800, 0, 'witch').setScale(2.5);
+        this.flyingWitch.body.immovable = true; 
+        this.flyingWitch.body.allowGravity = false;
+        this.flyingWitch.anims.play('witch-flying'); // witch flying animation
+        this.flyingWitchIsDead = false; // boolean flag for flying witch
+
 
         //title text configuration
         let titleConfig = {
@@ -157,23 +175,31 @@ class BossBattle extends Phaser.Scene {
             }
         }
         
-
-        // check if player collides with the witch        
+        // check if player collides with the walking witch        
         this.checkWitchCollision();
+        this.checkFlyingWitchCollision(); // collision with flying witch
 
-        // enemy follows player
-        this.enemy_tracks_player();    
+        // enemy tracking
+        this.walking_witch_tracks_player(); 
+        this.physics.moveTo(this.flyingWitch, this.player.x, this.player.y, 30);
                
     }
 
-    // make sure enemy moves towards the player
-    enemy_tracks_player() {
+    // make sure walking witch moves towards the player
+    walking_witch_tracks_player() {
         if(!this.isDead && !this.playerIsDead) {
             this.physics.moveTo(this.witch, this.player.x, this.witch.y, 50);
         }
     }
 
-    // checks for object collisions
+    //  // make sure flying witch moves towards the player
+    //  flying_witch_tracks_player() {
+    //     if(!this.flyingWitchIsDead && !this.playerIsDead) {
+    //         this.physics.moveTo(this.flyingWitch, this.player, 50);
+    //     }
+    // }
+
+    // checks for collision between walking witch and player
     // Inputs: witch, player
     // Output: boolean - based on if collided or not
     checkWitchCollision() {
@@ -186,6 +212,25 @@ class BossBattle extends Phaser.Scene {
                 this.isDead = true;
             } else {
                 // console.log('player should die');
+                this.player.destroy();
+                this.playerIsDead = true;
+            }
+
+        });
+    }
+
+    // checks for collision between flying witch and player
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkFlyingWitchCollision() {
+        this.physics.add.collider(this.player, this.flyingWitch, (player, witch) =>{
+            if(witch.body.touching.up) {  // player kills the witch
+                this.flyingWitch.anims.play('witch-melting'); // make the witch melt
+                this.time.delayedCall(2100, () => {
+                    witch.destroy(); // destroy the witch
+                });
+                this.flyingWitchIsDead = true;
+            } else {
                 this.player.destroy();
                 this.playerIsDead = true;
             }
