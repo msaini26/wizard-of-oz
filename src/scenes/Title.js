@@ -4,15 +4,20 @@ class Title extends Phaser.Scene {
     }
 
     preload(){
-
+        // load background image
+        this.load.image('title_background', './assets/background/2.png');
     }
 
     create(){
+
+        // place title background
+        this.background = this.add.tileSprite(0, 0, 800, 600, 'title_background').setOrigin(0, 0); // place background tile sprite
+
         //setting title configurations
         let titleConfig = {
-            fontFamily: 'ka1',
-            fontSize: '60px',
-            color: '#b5b5b5',
+            fontFamily: 'adventure',
+            fontSize: '150px',
+            color: 'white',
             align: 'center',
             padding: {
                 top: 5,
@@ -23,12 +28,27 @@ class Title extends Phaser.Scene {
             // },
         }
 
-        //adding text for title
-        var text = this.add.text(game.config.width/2, 150, 'The Wizard of Oz', titleConfig).setOrigin(0.5);
+        //setting play text configuration
+        let subConfig = {
+            fontFamily: 'joystix',
+            fontSize: '30px',
+            fontStyle: 'italic',
+            color: 'white',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
 
+
+        //adding text for title
+        this.title_text = this.add.text(game.config.width/2, 100, 'Adventures in Oz', titleConfig).setOrigin(0.5);
+        this.click_play = this.add.text(game.config.width/2, 350, 'Click play to continue', subConfig).setOrigin(0.5);
+        this.click_play.setInteractive();
+        
         //setting play text configuration
         let beginConfig = {
-            fontFamily: 'joystix',
+            fontFamily: 'ka1',
             fontSize: '60px',
             color: '#ffbf0f',
             padding: {
@@ -43,18 +63,59 @@ class Title extends Phaser.Scene {
 
         //boolean to keep track that sound effect plays once
         this.clicked = false;
+        
+        this.tweens.add({
+            targets: this.title_text,
+            y: 200,
+            ease: 'Bounce.easeOut',
+            duration: 2000,
+            repeat: -1,
+        });
+
+
     }
 
     update(){
-        //if mouse is hovering text
-        this.begin.on('pointerover', () => {
+
+        this.tweens.add({
+            targets: this.click_play,
+            alpha: { from: 1, to: 0.5 },
+            ease: 'Sine.InOut',
+            duration: 500,
+            repeat: -1,
+            // yoyo: true
+          });
+
+
+        // if mouse is hovering over text
+        this.begin.on('pointerover', function (pointer) {
             this.begin.setTint(0xeb7805); //set tint to text
-        });
+
+            // squish text
+            this.tweens.add({
+              targets: this.begin,
+              scaleX: '-=.2',
+              scaleY: '-=.2',
+              duration: 300,
+              ease: 'Power2'
+            }, this);
         
-        //if mouse is not hovering text
-        this.begin.on('pointerout', () => {
+         }, this);
+
+         // if mouse is not hovering over text
+         this.begin.on('pointerout', function (pointer) {
+      
             this.begin.clearTint(); //clear tint and revert to original
-        });
+            
+            this.tweens.add({
+              targets: this.begin,
+              scaleX: '+=.2',
+              scaleY: '+=.2',
+              duration: 400,
+              ease: 'Power2'
+            }, this);
+        
+         }, this);
         
         //if mouse clicks on text
         this.begin.on('pointerdown', () => {
