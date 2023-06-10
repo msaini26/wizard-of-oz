@@ -6,9 +6,26 @@ class Title extends Phaser.Scene {
     preload(){
         // load background image
         this.load.image('title_background', './assets/background/2.png');
+
+        // load background music
+        this.load.audio('background_music', './assets/audio/wizard.mp3');
     }
 
     create(){
+
+        // background music configurations
+        let musicConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            loop: true,
+            delay: 0,
+        }
+
+        // create sound instance
+        this.music = this.sound.add('background_music', musicConfig);
+        this.music.play(musicConfig); // play music with config settings
+
 
         // place title background
         this.background = this.add.tileSprite(0, 0, 800, 600, 'title_background').setOrigin(0, 0); // place background tile sprite
@@ -71,7 +88,6 @@ class Title extends Phaser.Scene {
             duration: 2000,
             repeat: -1,
         });
-
 
     }
 
