@@ -1,2 +1,2 @@
 # wizard-of-oz
-https://msaini26.github.io/wizard-of-oz/
+(https://wizard-of-oz.vercel.app/)
