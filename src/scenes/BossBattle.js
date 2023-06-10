@@ -55,6 +55,7 @@ class BossBattle extends Phaser.Scene {
         //physics collision
         this.physics.add.collider(this.player, terrainLayer);
 
+
         // witch moving animation
         this.anims.create({
             key: 'witch-moving',
@@ -69,7 +70,7 @@ class BossBattle extends Phaser.Scene {
         // witch melting; after witch is killed 
         this.anims.create({
             key: 'witch-melting',
-            frameRate: 5,
+            frameRate: 6,
             frames: this.anims.generateFrameNames("witch", { 
                 prefix: 'sprite',
                 start: 30, 
@@ -106,7 +107,6 @@ class BossBattle extends Phaser.Scene {
         this.flyingWitch.anims.play('witch-flying'); // witch flying animation
         this.flyingWitchIsDead = false; // boolean flag for flying witch
 
-
         //title text configuration
         let titleConfig = {
             fontFamily: 'Helvetica Neue',
@@ -121,7 +121,30 @@ class BossBattle extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        // boss battle scene text
         this.add.text(game.config.width/2, game.config.height/2, 'boss battle scene', titleConfig).setOrigin(0.5);
+
+        // group of enemies
+        this.enemies = this.add.group(); 
+
+        // max num of enemies
+        // const MAX_ENEMIES = 3
+        // this.time.delayedCall(1000, () => {
+        //     for (let i = 0; i < MAX_ENEMIES; i++) {
+        //         // witch creation
+        //         this.another_witch = this.physics.add.sprite(game.config.width * Math.random(), i, 'another-witch').setScale(2.5);
+        //         this.another_witch.body.immovable = true; // prevent witch from falling on collision
+        //         this.another_witch.body.allowGravity = false; // prevent witch from falling
+        //         this.another_witch.anims.play('witch-flying'); // witch flying animation
+        //         this.enemies.add(this.another_witch); // add single witch to group of witches
+    
+        //     }
+        // });
+
+        this.wave_1 = false;
+        this.wave_2 = false;
+        this.wave_3 = false;
+        this.wave_4 = false;
 
     }
 
@@ -168,15 +191,49 @@ class BossBattle extends Phaser.Scene {
                 // this.sound.play('boing'); //play boing sound effect
             }
         }
+
+        // add wave 1 of enemies
+        this.time.delayedCall(13000, () => {
+            if (!this.wave_1) {
+                this.add_more_enemies();
+                this.wave_1 = true;
+            }
+        });
+
+        // add wave 2 of enemies
+        this.time.delayedCall(30000, () => {
+            if (!this.wave_2) {
+                this.add_more_enemies();
+                this.wave_2 = true;
+            }
+        });
+
+        // add wave 3 of enemies
+        this.time.delayedCall(45000, () => {
+            if (!this.wave_3) {
+                this.add_more_enemies();
+                this.wave_3 = true;
+            }
+        });
+
+        // add wave 4 of enemies
+        this.time.delayedCall(60000, () => {
+            if (!this.wave_4) {
+                this.add_more_enemies();
+                this.wave_4 = true;
+            }
+        });
+
         
         // check if player collides with the walking witch        
         this.checkWitchCollision();
         this.checkFlyingWitchCollision(); // collision with flying witch
+        this.checkAddedWitchesCollision(); // collision with added witches
 
         // enemy tracking
         this.walking_witch_tracks_player(); 
         this.flying_witch_tracks_player();
-               
+        this.another_witch_tracks_player();               
     }
 
     // make sure walking witch moves towards the player
@@ -189,7 +246,23 @@ class BossBattle extends Phaser.Scene {
      // make sure flying witch moves towards the player
      flying_witch_tracks_player() {
         if(!this.flyingWitchIsDead && !this.playerIsDead) {
-            this.physics.moveTo(this.flyingWitch, this.player.x, this.player.y, 30);
+            this.physics.moveTo(this.flyingWitch, this.player.x, this.player.y, 50);
+        }
+    }
+
+    // make sure flying witch moves towards the player
+    another_witch_tracks_player() {
+        // console.log(this.enemies.children.entries);
+
+        for (let i = 0; i < this.enemies.children.entries.length; i++) {
+            // init witch in array of witches
+            console.log(this.enemies.children.entries[i]);
+            let extra_witch = this.enemies.children.entries[i];
+            if (extra_witch != null && !this.playerIsDead) { // make sure witch or player aren't gone
+                console.log(extra_witch);
+                console.log(this.player);
+                this.physics.moveTo(extra_witch, this.player.x, this.player.y, 30); // have enemy track the player
+            }
         }
     }
 
@@ -222,6 +295,7 @@ class BossBattle extends Phaser.Scene {
                 this.flyingWitch.anims.play('witch-melting'); // make the witch melt
                 this.time.delayedCall(2100, () => {
                     witch.destroy(); // destroy the witch
+                    this.enemies_left -= 1; // remove one enemy
                 });
                 this.flyingWitchIsDead = true;
             } else {
@@ -232,6 +306,46 @@ class BossBattle extends Phaser.Scene {
         });
     }
 
-  
+    // checks for collision between extra added witches and player
+    // Inputs: witch, player
+    // Output: boolean - based on if collided or not
+    checkAddedWitchesCollision() {
+
+        // go through array of witches
+        for (let i = 0; i < this.enemies.children.entries.length; i++) {
+            // init witch in array of witches
+            let extra_witch = this.enemies.children.entries[i];
+            
+            // collision detection for player and witch
+            this.physics.add.collider(this.player, extra_witch, (player, witch) =>{
+                if(witch.body.touching.up) {  // player kills the witch
+                    extra_witch.anims.play('witch-melting'); // make the witch melt
+                    this.time.delayedCall(2100, () => {
+                        witch.destroy(); // destroy the witch
+                    });
+                } else { // player killed by enemy
+                    this.player.destroy();
+                    this.playerIsDead = true;
+                }
+
+            });
+        }
+    }
+
+    // creates more witches to increase difficulty of level over time
+    // Inputs: witch group
+    // Output: None, just add more witches
+    add_more_enemies(witch_group) {
+        this.time.delayedCall(1000, () => {
+            for (let i = 0; i < 5; i++) {
+                // witch creation
+                this.another_witch = this.physics.add.sprite(game.config.width * Math.random() + Math.random(), 0, 'another-witch').setScale(2.5);
+                this.another_witch.body.immovable = true; // prevent witch from falling on collision
+                this.another_witch.body.allowGravity = false; // prevent witch from falling
+                this.another_witch.anims.play('witch-flying'); // witch flying animation
+                this.enemies.add(this.another_witch); // add single witch to group of witches    
+            }
+        });
+    } 
 
 }
