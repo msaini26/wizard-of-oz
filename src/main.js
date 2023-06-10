@@ -18,7 +18,8 @@ let config = {
             gravity: {
                 x: 0,
                 y: 0
-            }
+            },
+            tileBias: 30 //helps with tilemap collision
         }
     },
 
