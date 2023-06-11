@@ -24,6 +24,9 @@ class Tornado extends Phaser.Scene {
 
         this.load.image("brick", "./terrain/brick.png");
         
+        // load in tornado animation
+        this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
+        
 
         //loading boba powerup
         // this.load.image('boba','boba.png');
@@ -89,7 +92,7 @@ class Tornado extends Phaser.Scene {
         this.startGround.body.immovable = true; //set it so ground isn't affected by physics
         this.startGround.body.allowGravity = false; //set it so the ground doesn't fall 
 
-        //delay by 5 seconds and then destroy starting platform
+        // delay by 5 seconds and then destroy starting platform
         this.time.delayedCall(5000, () => { 
             this.startGround.destroy();
         });
@@ -153,6 +156,46 @@ class Tornado extends Phaser.Scene {
         //check collision of player and the starting platform
         this.physics.add.collider(this.player, this.startGround);
 
+        //creating tornado animation (after player finishes the level)
+        this.anims.create({
+            key: 'spinning-tornado',
+            frameRate: 3,
+            frames: this.anims.generateFrameNames("tornado", { 
+                prefix: 'sprite',
+                start: 1, 
+                end: 4 }),
+            repeat: -1
+        });
+
+
+        // create tornado sprite
+        this.tornado = this.add.sprite(350, 700, 'tornado');
+
+        // begin spinning tornado animation
+        this.time.delayedCall(29000, () => {
+            this.tornado.anims.play('spinning-tornado');
+        });
+
+        // manual animation to scale the tornado to take over screen
+        for (let i = 1; i < 6; i++) {
+            let time = 29000 + (i * 150); // scale each interval
+            this.time.delayedCall(time, () => {
+                this.tornado.scale += 1; // make tornado bigger
+                this.tornado.y -= 50;
+
+                
+            });
+        };
+
+        // after tornado moves up, move it right
+        this.time.delayedCall(29000, () => {
+            for (let x = 1; x < 5; x++) {
+                    this.tornado.x += 25;
+            }
+        })
+
+        
+
         this.time.delayedCall(30000, () => {
             this.scene.start('powerUpScene');
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
@@ -186,10 +229,11 @@ class Tornado extends Phaser.Scene {
         //painting high score label
         // scoreConfig.fontFamily = "bubbleBobble";
         // this.add.text(game.config.width - 250, 10, "High Score: ", scoreConfig);
+
+
     }
 
     update(){
-
 
         //reset high score if current player score is greater
         // if(localStorage.getItem("score") < this.score){
@@ -201,7 +245,6 @@ class Tornado extends Phaser.Scene {
             // this.blobBackgroundMusic.stop(); //stop the background music
             this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
         }
-
 
         //scrolling background
         this.background.tilePositionX += 2;
@@ -263,8 +306,6 @@ class Tornado extends Phaser.Scene {
             this.platformSpeed -= 80; 
         }
     }
-
-
 
     updateScore() {
 

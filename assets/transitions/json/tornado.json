@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "sprite1": {
+      "frame": { "x": 65, "y": 17, "w": 103, "h": 142 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 103, "h": 142 },
+      "sourceSize": { "w": 103, "h": 142 }
+    },
+    "sprite2": {
+      "frame": { "x": 306, "y": 21, "w": 107, "h": 142 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 107, "h": 142 },
+      "sourceSize": { "w": 107, "h": 142 }
+    },
+    "sprite3": {
+      "frame": { "x": 556, "y": 26, "w": 103, "h": 142 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 103, "h": 142 },
+      "sourceSize": { "w": 103, "h": 142 }
+    },
+    "sprite4": {
+      "frame": { "x": 797, "y": 30, "w": 107, "h": 141 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 107, "h": 141 },
+      "sourceSize": { "w": 107, "h": 141 }
+    }
+  },
+  "meta": {
+    "app": "https://www.leshylabs.com/apps/sstool/",
+    "version": "Leshy SpriteSheet Tool v0.8.4",
+    "image": "tornado.png",
+    "size": { "w": 1250, "h": 1000 },
+    "scale": 1
+  }
+}
