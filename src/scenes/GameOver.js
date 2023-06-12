@@ -24,6 +24,9 @@ class GameOver extends Phaser.Scene {
         }
 
         this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
+
+        // TODO: define left or right arrow keys to restart the game
+        // TODO: define c key to move to credits
     }
 
     update(){

@@ -23,11 +23,13 @@ let config = {
         }
     },
 
-    // scene: [Title, Tornado, PowerUp, BossBattle, GameOver, Play],
-    scene: [Tornado, PowerUp, BossBattle, GameOver, Play],
+    scene: [Title, Tornado, PowerUp, BossBattle, GameOver, Play],
 }
 
 let game = new Phaser.Game(config) // create phaser game
 
 // define the keys
 let KeyF, keyR, KeyLEFT, keyRIGHT, keyUP;
+
+// define w,a,s,d keys
+let keyW, keyA, keyS, keyD;

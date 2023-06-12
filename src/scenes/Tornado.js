@@ -54,6 +54,12 @@ class Tornado extends Phaser.Scene {
         this.platformSpeed = -200;
         this.platformSpeedMax = -700;
 
+        // define W,A,S,D keys for moving
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
         // set music configurations
         // let blobBackgroundMusicConfig = {
         //     mute: false,
@@ -192,9 +198,7 @@ class Tornado extends Phaser.Scene {
             for (let x = 1; x < 5; x++) {
                     this.tornado.x += 25;
             }
-        })
-
-        
+        });
 
         this.time.delayedCall(30000, () => {
             this.scene.start('powerUpScene');
@@ -252,11 +256,11 @@ class Tornado extends Phaser.Scene {
         this.updateScore();
 
         //adjusting acceleration, drag, and animation to match player input
-        if(cursors.left.isDown) { //if player presses left arrow key
+        if(cursors.left.isDown || Phaser.Input.Keyboard.JustDown(keyA)) { //if player presses left arrow key or A key
             this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
             this.player.setFlip(true, false); //flip the animation so it faces left
             this.player.anims.play('run', true); //play the walking animation
-        } else if(cursors.right.isDown) { //if player presses right arrow key
+        } else if(cursors.right.isDown || Phaser.Input.Keyboard.JustDown(keyD)) { //if player presses right arrow key or D key
             this.player.body.setAccelerationX(this.ACCELERATION); //move player right
             this.player.resetFlip(); //reset animation to face right
             this.player.anims.play('run', true); //play the walking animation
@@ -278,13 +282,13 @@ class Tornado extends Phaser.Scene {
 	    }
 
         //if up arrow key is pressed and we have not reached max jumps yet
-        if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
+        if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150) || Phaser.Input.Keyboard.DownDuration(keyW, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
 	    } 
 
         //if player is jumping and up arrow is pressed
-        if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
+        if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up) || Phaser.Input.Keyboard.UpDuration(keyW)) {
 	    	this.jumps--; //subtract number of jumps player has left
 	    	this.jumping = false; //set jumping to false
             // this.sound.play('boing'); //play boing sound effect
