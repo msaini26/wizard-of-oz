@@ -136,7 +136,6 @@ class PowerUp extends Phaser.Scene {
         this.chest2.body.checkCollision.right = false;
 
 
-
         this.anims.create({
             key: 'chest3',
             frameRate: 10,
@@ -288,7 +287,7 @@ class PowerUp extends Phaser.Scene {
         // this.item;
 
         // this.item = new Items(this, this.imgName);
-        this.count = 50;
+        this.count = 75;
         this.startFall = false;
         this.checkStart = false;
         this.checkNext = false;
@@ -360,14 +359,14 @@ class PowerUp extends Phaser.Scene {
         // }
     }
 
-    outsideBounds() {
-        //checks if player has fallen outside bounds of screen
-        if(this.player.x > game.config.width - 40){
-                return true; //return true if player is outside
-        } else{
-            return false; //return false if player is inside bounds
-        }
-    }
+    // outsideBounds() {
+    //     //checks if player has fallen outside bounds of screen
+    //     if(this.player.x > game.config.width - 40){
+    //             return true; //return true if player is outside
+    //     } else{
+    //         return false; //return false if player is inside bounds
+    //     }
+    // }
 
     updateChest() {
         this.physics.add.collider(this.player, this.chest1, (player, chest) =>{
@@ -609,5 +608,11 @@ class PowerUp extends Phaser.Scene {
             this.score++;
             console.log(this.score);
         });
+    }
+
+    checkScore() {
+        if(this.score >= 10){
+            
+        }
     }
 }
