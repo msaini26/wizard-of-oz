@@ -9,12 +9,13 @@ class Tornado extends Phaser.Scene {
 
         //load player movements
         this.load.image("fall", "./player/Fall.png");
-        this.load.image("jump", "./player/Jump.png");
+        // this.load.image("jump", "./player/Jump.png");
 
         //load each atlas for player animations
-        this.load.atlas("run", "./player/run.png", "./player/run.json");
+        this.load.atlas("run", "./dorothy/png/run.png", "./dorothy/json/run.json");
         this.load.atlas("hit", "./player/hit.png", "./player/hit.json");
-        this.load.atlas("idle", "./player/idle.png", "./player/idle.json");
+        this.load.atlas("idle", "./dorothy/png/idle.png", "./dorothy/json/idle.json");
+        this.load.atlas("jump", "./dorothy/png/jump.png", "./dorothy/json/jump.json");
         this.load.atlas("wallJump", "./player/wallJump.png", "./player/wallJump.json");
         this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
 
@@ -106,11 +107,11 @@ class Tornado extends Phaser.Scene {
         //creating idle animation (when the player isn't moving)
         this.anims.create({
             key: 'idle',
-            frameRate: 15,
+            frameRate: 4,
             frames: this.anims.generateFrameNames("idle", { 
                 prefix: 'sprite',
                 start: 1, 
-                end: 11 }),
+                end: 4 }),
             repeat: -1
         });
 
@@ -129,11 +130,21 @@ class Tornado extends Phaser.Scene {
         //creating walking animation (when player moves left and right)
         this.anims.create({
             key: 'run',
-            frameRate: 15,
+            frameRate: 30,
             frames: this.anims.generateFrameNames("run", { 
                 prefix: 'sprite',
                 start: 1, 
-                end: 12 }),
+                end: 24 }),
+            repeat: -1
+        });
+
+        //creating jumping animation
+        this.anims.create({
+            key: 'jump',
+            frameRate: 3,
+            frames: this.anims.generateFrameNames("jump", { 
+                start: 1, 
+                end: 19 }),
             repeat: -1
         });
 
@@ -278,13 +289,14 @@ class Tornado extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
-            this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
+        //     this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
         //if up arrow key is pressed and we have not reached max jumps yet
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150) || Phaser.Input.Keyboard.DownDuration(keyW, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
+            this.player.anims.play('jump', true); // play jumping animation
 	    } 
 
         //if player is jumping and up arrow is pressed

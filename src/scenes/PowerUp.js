@@ -274,11 +274,13 @@ class PowerUp extends Phaser.Scene {
         // left arrow key or the 'A' key
         if(cursors.left.isDown || Phaser.Input.Keyboard.JustDown(keyA)){
             this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
-            this.player.setFlip(true, false); //flip the animation so it faces left
+            this.player.setFlip(true, false); //flip the animation so it faces right
             this.player.anims.play('run', true); //play the walking animation
         } else if(cursors.right.isDown || Phaser.Input.Keyboard.JustDown(keyD)) { //if player presses right arrow key or uses the 'D' key
             this.player.body.setAccelerationX(this.ACCELERATION); //move player right
-            this.player.resetFlip(); //reset animation to face right
+            this.player.resetFlip(); //reset animation to face left
+
+
             this.player.anims.play('run', true); //play the walking animation
         } else {
             this.player.body.setAccelerationX(0); // set acceleration to 0 so DRAG will take over
@@ -292,13 +294,14 @@ class PowerUp extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
-            this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
+            // this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
         //if up arrow key is pressed and we have not reached max jumps yet
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150) || Phaser.Input.Keyboard.DownDuration(keyW, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
+            this.player.anims.play('jump', true);
 	    } 
 
         //if player is jumping and up arrow is pressed
