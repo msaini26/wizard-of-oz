@@ -93,6 +93,7 @@ class Credits extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.sound.play('sfx_select'); // play selector sound
             this.scene.start('titleScene'); // begin first level
+            introMusic.stop();
         }
     }
 }

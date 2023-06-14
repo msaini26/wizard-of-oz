@@ -19,7 +19,6 @@ class Tornado extends Phaser.Scene {
         this.load.atlas("wallJump", "./player/wallJump.png", "./player/wallJump.json");
         this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
 
-
         //loading background
         this.load.image('background','./background/background2.png');
 
@@ -27,21 +26,6 @@ class Tornado extends Phaser.Scene {
         
         // load in tornado animation
         this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
-        
-
-        //loading boba powerup
-        // this.load.image('boba','boba.png');
-
-        //loading bubble particle
-        // this.load.image('bubble','bubble.png');
-        
-        //loading audio sound effects
-        // this.load.audio('boing', './sounds/cartoon-jump.mp3');
-        // this.load.audio('sparkle', './sounds/twinklesparkle.mp3');
-        // this.load.audio('powerup', './sounds/powerup.mp3');
-
-        // load in game background music
-        // this.load.audio('blob-music', './sounds/chiptune-grooving.mp3'); 
     }
 
     create() {
@@ -60,19 +44,6 @@ class Tornado extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-
-        // set music configurations
-        // let blobBackgroundMusicConfig = {
-        //     mute: false,
-        //     volume: 1, 
-        //     loop: true, //looping music so it is never ending
-        //     rate: 1,
-        //     delay: 0 
-        // };
-
-        // set background game music
-        // this.blobBackgroundMusic = this.sound.add('blob-music', blobBackgroundMusicConfig);
-        // this.blobBackgroundMusic.play(blobBackgroundMusicConfig); // play background music based on configurations
 
         //adding background tile
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
@@ -122,8 +93,6 @@ class Tornado extends Phaser.Scene {
         this.player.body.checkCollision.left = false;
         this.player.body.checkCollision.right = false;
 
-        // this.player.anims.play('idle', true);
-
         //initializing the score of player
         this.score = 0;
 
@@ -147,16 +116,6 @@ class Tornado extends Phaser.Scene {
                 end: 19 }),
             repeat: -1
         });
-
-        //creating jump animation (when the player jumps/is in the air)
-        // this.jump = this.anims.create({
-        //     key: 'jump',
-        //     // defaultTextureKey: 'jump',
-        //     frames: [
-        //         { frame: 'jump' }
-        //     ],
-        //     repeat: -1
-        // });
 
         //creating event to increase speed as the player plays (increasing difficulty)
         this.difficultyTimer = this.time.addEvent({
@@ -213,48 +172,11 @@ class Tornado extends Phaser.Scene {
 
         this.time.delayedCall(30000, () => {
             this.scene.start('powerUpScene');
-            // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
-            // this.gameOver = true;
         }, null, this);
-
-        //configuration to paint the score and high score on the screen
-        // let scoreConfig = {
-        //     fontFamily: 'simpleKindOfGirl',
-        //     fontSize: '28px',
-        //     backgroundColor: '#c9b8ff',
-        //     color: '#6a38ff',
-        //     align: 'right',
-        //     padding: {
-        //         top: 5,
-        //         bottom: 5,
-        //         right: 5,
-        //     },
-        //     fixedWidth: 100
-        // }
-
-        //painting player score
-        // this.scoreLeft = this.add.text(10, 10, this.score, scoreConfig);
-        // this.add.rectangle(game.config.width - 260, 10, 250, 40, 0xc9b8ff).setOrigin(0, 0);
-
-        //painting high score
-        // scoreConfig.fixedWidth = 0;
-        // this.highScore = this.add.text(game.config.width - 70, 10, localStorage.getItem("score"), scoreConfig);
-
-        //painting high score label
-        // scoreConfig.fontFamily = "bubbleBobble";
-        // this.add.text(game.config.width - 250, 10, "High Score: ", scoreConfig);
-
 
     }
 
     update(){
-
-        //reset high score if current player score is greater
-        // if(localStorage.getItem("score") < this.score){
-        //     localStorage.setItem("score", this.score); //sets high score to new score
-        //     this.highScore.text = localStorage.getItem("score"); //update text on screen to new high score
-        // }
 
         if(this.outsideBounds()){
             // this.blobBackgroundMusic.stop(); //stop the background music
@@ -324,16 +246,11 @@ class Tornado extends Phaser.Scene {
     }
 
     updateScore() {
-
         //checks if the player collides with a different colored platform
         this.physics.add.collider(this.player, this.platformGroup, (player, platform) =>{
             //if the player hasn't collided with this platform yet
             if(!this.platformLanded.contains(platform)) {
                 this.platformLanded.add(platform); //add it to the already landed platforms group
-                // if(this.score > 0){ //check if score is not zero
-                //     this.score -= 1; //subtract one point from their score
-                // }
-                // this.scoreLeft.text = this.score; //repaint score text
             }
         });
     }

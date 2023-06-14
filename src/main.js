@@ -70,3 +70,5 @@ let keyW, keyA, keyS, keyD;
 
 // define credits key
 let keyC; 
+
+let introMusic;

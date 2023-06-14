@@ -30,8 +30,8 @@ class Title extends Phaser.Scene {
         }
 
         // create sound instance
-        this.music = this.sound.add('background_music', musicConfig);
-        this.music.play(musicConfig); // play music with config settings
+        introMusic = this.sound.add('background_music', musicConfig);
+        introMusic.play(musicConfig); // play music with config settings
 
 
         // place title background
@@ -163,12 +163,10 @@ class Title extends Phaser.Scene {
         this.begin.on('pointerdown', () => {
             //if sound effect hasn't played yet
             if(!this.clicked){
-                // this.sound.play('chimes'); //play sound
+                // play selector sound effect
+                this.sound.play('sfx_select'); // play selector sound
                 this.clicked = true; //set clicked to true
             }
-
-            // play selector sound effect
-            this.sound.play('sfx_select'); // play selector sound
 
             //move to next scene
             this.scene.start('tornadoScene');

@@ -16,7 +16,7 @@ class PowerUp extends Phaser.Scene {
         this.load.image("fall", "./player/Fall.png");
         this.load.image("jump", "./player/Jump.png");
 
-        this.load.image('coin', './powerups/png/coin.png');
+        // this.load.image('coin', './powerups/png/coin.png');
 
         // treasure or power up container
         this.load.atlas("chest", "./powerups/png/chest.png", "./powerups/json/chest.json");
@@ -26,18 +26,25 @@ class PowerUp extends Phaser.Scene {
         this.load.atlas("monkey", "./powerups/png/monkey.png", "./powerups//json/monkey.json");
         this.load.atlas("lion", "./powerups/png/lion.png", "./powerups/json/lion.json");
 
+        //collectable items
+        // this.load.atlas("heart", "./powerups/png/heart.png", "./powerups/json/heart.json");
+        // this.load.atlas("fire", "./powerups/png/fire.png", "./powerups/json/fire.json");
+        this.load.image('brain', './powerups/png/brain.png');
+        this.load.image('heart', './powerups/png/heart.png');
+        this.load.image('fire', './powerups/png/fire.png');
+
     }
 
     // create background and game elements
     create() {
-        this.ACCELERATION = 600;
-        this.DRAG = 700; 
+        this.ACCELERATION = 800;
+        this.DRAG = 900; 
         this.JUMP_VELOCITY = -700;
         this.MAX_JUMPS = 3;
         this.SCROLL_SPEED = 4;
         this.physics.world.gravity.y = 3000;
-        this.platformSpeed = -200;
-        this.platformSpeedMax = -700;
+        // this.itemSpeed = 200;
+        // this.itemSpeedMax = 700;
 
         // define W,A,S,D keys for moving
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -62,12 +69,23 @@ class PowerUp extends Phaser.Scene {
         //spawn location = where player starts
         const playerSpawn = map.findObject('Spawn', obj => obj.name === 'Spawn');
 
-        //adding player
-        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
-        this.player.anims.play('idle', true); 
+        // //adding player
+        // this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
+        // this.player.anims.play('idle', true); 
 
-        //setting collision
-        this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
+        // //setting collision
+        // this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
+
+        //keeps track of other colored platforms (different from player color)
+        this.itemGroup = this.add.group({
+            runChildUpdate: true    // make sure update runs on group children
+        });
+
+        this.maxItems = 10;
+
+        // this.time.delayedCall(1000, () => { 
+        //     this.addItem(); 
+        // });
 
         this.anims.create({
             key: 'chest1',
@@ -116,7 +134,6 @@ class PowerUp extends Phaser.Scene {
         this.chest2.body.checkCollision.up = false; 
         this.chest2.body.checkCollision.left = false;
         this.chest2.body.checkCollision.right = false;
-
 
 
         this.anims.create({
@@ -217,7 +234,7 @@ class PowerUp extends Phaser.Scene {
             repeat: 0
         });
 
-        this.powerlist = ['tincan', 'lion', 'scarecrow', 'monkey', 'monkey'];
+        this.powerlist = ['tincan', 'lion', 'scarecrow', 'monkey'];
         this.powerAnim = Phaser.Utils.Array.GetRandom(this.powerlist);
         this.powerFront = 0;
         this.text = '';
@@ -237,6 +254,12 @@ class PowerUp extends Phaser.Scene {
             this.textGoal = 'Too bad so sad. You don\'t get any powerups this time!';
         }
 
+        //adding player
+        this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
+        this.player.anims.play('idle', true); 
+
+        //setting collision
+        this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
 
         //physics collision
         this.physics.add.collider(this.player, terrainLayer);
@@ -259,17 +282,39 @@ class PowerUp extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        // this.add.text(game.config.width/2, game.config.height/2, 'power up scene', titleConfig).setOrigin(0.5);
+        this.imgName = '';
+        this.setItemImage();
+        // this.item;
+
+        // this.item = new Items(this, this.imgName);
+        this.count = 75;
+        this.startFall = false;
+        this.checkStart = false;
+        this.checkNext = false;
+        this.clicked = false;
+
+        this.score = 0;
+
     }
 
     // updates every frame
     update() {
+        if(this.checkNext){
+            this.updateNext();
+        }
 
-        // if(this.p1.x >= (game.config.width - 50)){
-        //     console.log("next level");
-        // }
+        if(this.checkStart){
+            this.updateStart();
+        }
 
-        this.updateChest();
+        if(!this.chestPlayed){
+            this.updateChest();
+        }
+        // this.updateChest();
+        if(this.startFall){
+            this.addItem(this.imgName); 
+            this.collidesItem();
+        }
 
         // left arrow key or the 'A' key
         if(cursors.left.isDown || Phaser.Input.Keyboard.JustDown(keyA)){
@@ -312,19 +357,19 @@ class PowerUp extends Phaser.Scene {
 	    }
 
         // move to next scene
-        if (this.outsideBounds()) {
-            this.scene.start('bossBattleScene');
-        }
+        // if (this.outsideBounds()) {
+        //     this.scene.start('bossBattleScene');
+        // }
     }
 
-    outsideBounds() {
-        //checks if player has fallen outside bounds of screen
-        if(this.player.x > game.config.width - 40){
-                return true; //return true if player is outside
-        } else{
-            return false; //return false if player is inside bounds
-        }
-    }
+    // outsideBounds() {
+    //     //checks if player has fallen outside bounds of screen
+    //     if(this.player.x > game.config.width - 40){
+    //             return true; //return true if player is outside
+    //     } else{
+    //         return false; //return false if player is inside bounds
+    //     }
+    // }
 
     updateChest() {
         this.physics.add.collider(this.player, this.chest1, (player, chest) =>{
@@ -340,6 +385,7 @@ class PowerUp extends Phaser.Scene {
                 chest.on('animationcomplete', () => {
                     this.setAnimation(170);
                     this.setText();
+                    chest.body.checkCollision.down = false; 
                 });
 
                 this.chestPlayed = true;
@@ -358,6 +404,8 @@ class PowerUp extends Phaser.Scene {
 
                 chest.on('animationcomplete', () => {
                     this.setAnimation(320);
+                    this.setText();
+                    chest.body.checkCollision.down = false; 
                 });
 
                 this.chestPlayed = true;
@@ -376,6 +424,8 @@ class PowerUp extends Phaser.Scene {
 
                 chest.on('animationcomplete', () => {
                     this.setAnimation(470);
+                    this.setText();
+                    chest.body.checkCollision.down = false; 
                 });
 
                 this.chestPlayed = true;
@@ -394,6 +444,8 @@ class PowerUp extends Phaser.Scene {
 
                 chest.on('animationcomplete', () => {
                     this.setAnimation(620);
+                    this.setText();
+                    chest.body.checkCollision.down = false; 
                 });
 
                 this.chestPlayed = true;
@@ -402,6 +454,7 @@ class PowerUp extends Phaser.Scene {
         
     }
 
+    //setting each image so once it spins, it lands on the frame where the player is faced forward
     getPowerFront(){
         if(this.powerAnim === 'tincan'){
             this.powerFront = 4;
@@ -414,18 +467,19 @@ class PowerUp extends Phaser.Scene {
         }
     }
 
+    //plays each character animation and stops at the frame where character is facing forward
     setAnimation(x){
-        this.getPowerFront();
-        this.power.x = x;
-        this.power.visible = true;
-        this.power.anims.play(this.powerAnim);
-        this.power.on('animationcomplete', () => {
+        this.getPowerFront(); //gets the frame number where the character is facing forward
+        this.power.x = x; //sets the position of character to the chest that was hit
+        this.power.visible = true; //makes the character visible
+        this.power.anims.play(this.powerAnim); //plays animation
+        this.power.on('animationcomplete', () => { //stops at the frame where character is facing forward
             this.power.anims.pause(this.power.anims.currentAnim.frames[this.powerFront]);
         });
     }
 
     setText(){
-        //setting play text configuration
+        //setting text configuration
         let textConfig = {
             fontFamily: 'joystix',
             fontSize: '20px',
@@ -440,9 +494,128 @@ class PowerUp extends Phaser.Scene {
             },
         }
 
-        //adding play text
-        this.add.text(game.config.width/2, 50, this.text, textConfig).setOrigin(0.5);
+        //adding text description of player and goal
+        this.intro = this.add.text(game.config.width/2, 50, this.text, textConfig).setOrigin(0.5);
         textConfig.color = '#e38222';
-        this.add.text(game.config.width/2, 100, this.textGoal, textConfig).setOrigin(0.5);
+        this.rules = this.add.text(game.config.width/2, 100, this.textGoal, textConfig).setOrigin(0.5);
+
+        textConfig.color = '#f54242';
+        textConfig.fontFamily = 'ka1';
+        textConfig.fontSize = '30px';
+        // this.start = this.add.text(game.config.width/2, 160, 'START', textConfig).setOrigin(0.5);
+        // this.start.setInteractive();
+        // this.checkStart = true;
+
+        if(this.powerAnim === 'monkey'){
+            this.next = this.add.text(game.config.width/2, 160, 'NEXT', textConfig).setOrigin(0.5);
+            this.next.setInteractive();
+            this.checkNext = true;
+        } else {
+            this.start = this.add.text(game.config.width/2, 160, 'START', textConfig).setOrigin(0.5);
+            this.start.setInteractive();
+            this.checkStart = true;
+        }
+    }
+
+    updateStart() {
+        //if mouse is hovering text
+        this.start.on('pointerover', () => {
+            this.start.setTint(0xcf0000); //set tint
+        });
+        
+        //if mouse is not hovering text
+        this.start.on('pointerout', () => {
+            this.start.clearTint(); //clear tint and revert to original color
+        });
+        
+        //if mouse clicks text
+        this.start.on('pointerdown', () => {
+            this.start.clearTint();
+            //if sound hasn't played yet
+            if(!this.clicked){
+                // this.sound.play('select'); //play sound effect
+                this.clicked = true; //set boolean to true
+                // this.item = new Items(this, this.imgName);
+                // this.itemGroup.add(this.item); 
+                this.intro.visible = false;
+                this.rules.visible = false;
+                this.start.visible = false;
+                this.chest1.visible = false;
+                this.chest2.visible = false;
+                this.chest3.visible = false;
+                this.chest4.visible = false;
+                this.power.visible = false;
+
+                this.time.delayedCall(1000, () => {
+                    this.item = new Items(this, this.imgName);
+                    this.itemGroup.add(this.item); 
+                    this.startFall = true;
+                    // this.checkStart = false;
+                    // this.start.disableInteractive();
+                }, null, this);
+            }
+
+            // this.startFall = true;
+            this.checkStart = false;
+            this.start.disableInteractive();
+
+        });
+    }
+
+    updateNext() {
+        //if mouse is hovering text
+        this.next.on('pointerover', () => {
+            this.next.setTint(0xcf0000); //set tint
+        });
+        
+        //if mouse is not hovering text
+        this.next.on('pointerout', () => {
+            this.next.clearTint(); //clear tint and revert to original color
+        });
+        
+        //if mouse clicks text
+        this.next.on('pointerdown', () => {
+            this.next.clearTint();
+            //if sound hasn't played yet
+            if(!this.clicked){
+                // this.sound.play('select'); //play sound effect
+                this.clicked = true; //set boolean to true
+                this.scene.start('bossBattleScene');
+            }
+            this.checkNext = false;
+
+        });
+    }
+
+    setItemImage() {
+        if(this.powerAnim === 'tincan'){
+            this.imgName = 'heart';
+        } else if(this.powerAnim === 'scarecrow'){
+            this.imgName = 'brain';
+        } else if(this.powerAnim === 'lion'){
+            this.imgName = 'fire';
+        }
+    }
+
+    addItem(item) {
+        while(this.count > 0 && this.item.y > 30 && this.item.newItem){
+            this.item = new Items(this, item);
+            this.itemGroup.add(this.item); 
+            this.count--;
+        }
+    }
+
+    collidesItem() {
+        this.physics.add.overlap(this.player, this.itemGroup, (player, item) =>{
+            item.destroy();
+            this.score++;
+            console.log(this.score);
+        });
+    }
+
+    checkScore() {
+        if(this.score >= 10){
+            
+        }
     }
 }
