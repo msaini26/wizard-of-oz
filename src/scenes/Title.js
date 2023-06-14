@@ -9,9 +9,16 @@ class Title extends Phaser.Scene {
 
         // load background music
         this.load.audio('background_music', './assets/audio/wizard.mp3');
+
+        // select key
+        this.load.audio('sfx_select', './assets/audio/select.mp3');
+
     }
 
     create(){
+        // define credits key
+        keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+
 
         // background music configurations
         let musicConfig = {
@@ -45,6 +52,7 @@ class Title extends Phaser.Scene {
             // },
         }
 
+        
         //setting play text configuration
         let subConfig = {
             fontFamily: 'joystix',
@@ -56,6 +64,11 @@ class Title extends Phaser.Scene {
                 bottom: 5,
             },
         }
+
+        var name_credits = this.add.text(game.config.width/2, game.config.height - 30, 'By: Mansi Saini & Rebecca Zhao', subConfig).setOrigin(0.5);
+        subConfig.color = '#ad9165';
+        this.credits = this.add.text(5, 10, 'Press (C) for Credits', subConfig);
+
 
 
         //adding text for title
@@ -75,7 +88,7 @@ class Title extends Phaser.Scene {
         }
 
         //adding play text
-        this.begin = this.add.text(game.config.width/2, game.config.height - 100, 'PLAY', beginConfig).setOrigin(0.5);
+        this.begin = this.add.text(game.config.width/2, game.config.height - 150, 'PLAY', beginConfig).setOrigin(0.5);
         this.begin.setInteractive(); //set interactive so mouse click works
 
         //boolean to keep track that sound effect plays once
@@ -101,6 +114,11 @@ class Title extends Phaser.Scene {
             repeat: -1,
             // yoyo: true
           });
+
+        if (Phaser.Input.Keyboard.JustDown(keyC)) {
+            this.sound.play('sfx_select'); // play selector sound
+            this.scene.start('creditsScene'); // begin first level
+        }
 
 
         // if mouse is hovering over text
@@ -140,6 +158,9 @@ class Title extends Phaser.Scene {
                 // this.sound.play('chimes'); //play sound
                 this.clicked = true; //set clicked to true
             }
+
+            // play selector sound effect
+            this.sound.play('sfx_select'); // play selector sound
 
             //move to next scene
             this.scene.start('tornadoScene');
