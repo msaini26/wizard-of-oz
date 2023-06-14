@@ -5,9 +5,31 @@ class GameOver extends Phaser.Scene {
     
     preload(){
 
+        // background tilemap
+        this.load.image('terrainImage', 'terrain/Terrain.png');
+        this.load.image('purpleImage', 'tilemaps/Purple.png');
+        this.load.tilemapTiledJSON('battleJSON', 'tilemaps/BattleField.json');
+
+        // select key
+        this.load.audio('sfx_select', './assets/audio/select.mp3');
+
     }
 
     create(){
+
+         // define credits key
+         keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+
+
+        //creating tilemap
+        const map = this.add.tilemap('battleJSON');
+
+        //adding tileset images
+        const backgroundTileSet = map.addTilesetImage('Purple', 'purpleImage');
+
+        //creating layers
+        const bgLayer = map.createLayer('Background', backgroundTileSet, 0, 0);
+
 
         //title text configuration
         let titleConfig = {
@@ -25,11 +47,39 @@ class GameOver extends Phaser.Scene {
 
         this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
 
-        // TODO: define left or right arrow keys to restart the game
-        // TODO: define c key to move to credits
-    }
+
+         //setting play text configuration
+         let subConfig = {
+            fontFamily: 'joystix',
+            fontSize: '30px',
+            fontStyle: 'italic',
+            color: '#ffa8db',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+
+        // name credits
+        var name_credits = this.add.text(game.config.width/2, game.config.height - 30, 'By: Mansi Saini & Rebecca Zhao', subConfig).setOrigin(0.5);
+        this.credits = this.add.text(20, 40, 'Press (C) for Credits', subConfig);
+
+
+        // play again
+        this.playAgain = this.add.text(game.config.width/2, game.config.height - 100, 'Press (R) to Restart', subConfig).setOrigin(0.5);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);    }
 
     update(){
+        // credits scene
+        if (Phaser.Input.Keyboard.JustDown(keyC)) {
+            this.sound.play('sfx_select'); // play selector sound
+            this.scene.start('creditsScene'); // begin first level
+        }
 
+        // restart the game
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.sound.play('sfx_select'); // play selector sound
+            this.scene.start('tornadoScene'); // begin first level
+        }
     }
 }
