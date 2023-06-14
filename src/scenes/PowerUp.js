@@ -45,8 +45,6 @@ class PowerUp extends Phaser.Scene {
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-
-
         //creating tilemap
         const map = this.add.tilemap('YellowBrickJSON');
 
@@ -60,14 +58,6 @@ class PowerUp extends Phaser.Scene {
 
         //enable collision
         terrainLayer.setCollisionByProperty({collides: true});
-
-        // define a render debug so we can see the tilemap's collision bounds
-        // const debugGraphics = this.add.graphics().setAlpha(0.75);
-        // terrainLayer.renderDebug(debugGraphics, {
-        //     tileColor: null,    // color of non-colliding tiles
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),    // color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)                // color of colliding face edges
-        // });
 
         //spawn location = where player starts
         const playerSpawn = map.findObject('Spawn', obj => obj.name === 'Spawn');
@@ -191,11 +181,10 @@ class PowerUp extends Phaser.Scene {
         });
 
         this.power = this.physics.add.sprite(620, 240, 'friends', 'sprite13').setScale(4);
-        this.power.body.immovable = true; // don't move coin
+        this.power.body.immovable = true;
         this.power.body.allowGravity = false; 
 
         this.power.visible = false;
-
 
 
         this.anims.create({
@@ -207,15 +196,6 @@ class PowerUp extends Phaser.Scene {
                 end: 80 }),
             repeat: 0
         });
-
-        // this.scarecrow = this.physics.add.sprite(470, 240, 'friends', 'sprite77').setScale(4);
-        // this.scarecrow.body.immovable = true; // don't move coin
-        // this.scarecrow.body.allowGravity = false; 
-
-        // this.scarecrow.anims.play('scarecrow');
-
-        // this.scarecrow.visible = false;
-
         
         this.anims.create({
             key: 'monkey',
@@ -227,15 +207,6 @@ class PowerUp extends Phaser.Scene {
             repeat: 0
         });
 
-        // this.monkey = this.physics.add.sprite(320, 230, 'monkey', 'sprite1').setScale(4);
-        // this.monkey.body.immovable = true; // don't move coin
-        // this.monkey.body.allowGravity = false; 
-
-        // this.monkey.anims.play('monkey');
-
-        // this.monkey.visible = false;
-
-
         this.anims.create({
             key: 'lion',
             frameRate: 10,
@@ -246,18 +217,25 @@ class PowerUp extends Phaser.Scene {
             repeat: 0
         });
 
-        // this.lion = this.physics.add.sprite(170, 230, 'lion', 'lion1').setScale(4);
-        // this.lion.body.immovable = true; // don't move coin
-        // this.lion.body.allowGravity = false; 
-
-        // this.lion.anims.play('lion');
-
-        // this.monkey.visible = false;
-
         this.powerlist = ['tincan', 'lion', 'scarecrow', 'monkey', 'monkey'];
         this.powerAnim = Phaser.Utils.Array.GetRandom(this.powerlist);
         this.powerFront = 0;
+        this.text = '';
+        this.textGoal = '';
 
+        if(this.powerAnim === 'tincan'){ //no heart
+            this.text = 'Hello! I\'m a Tincan with no heart.';
+            this.textGoal = 'Help me collect as many hearts as possible to fill my empty can!';
+        } else if (this.powerAnim === 'lion'){ //no courage
+            this.text = 'Hello! I\'m a Lion with no courage.';
+            this.textGoal = 'Help me collect some fire to ignite the courage inside of me!';
+        } else if (this.powerAnim === 'scarecrow'){ //no brain
+            this.text = 'Hello! I\'m a Scarecrow with no brain.';
+            this.textGoal = 'Help me collect as many brains as possible to fill my empty head!';
+        } else if (this.powerAnim === 'monkey'){ //evil monkey
+            this.text = 'Mwahahaha! I\'m the Evil Monkey. One of the evil witch\'s helper.';
+            this.textGoal = 'Too bad so sad. You don\'t get any powerups this time!';
+        }
 
 
         //physics collision
@@ -358,6 +336,7 @@ class PowerUp extends Phaser.Scene {
 
                 chest.on('animationcomplete', () => {
                     this.setAnimation(170);
+                    this.setText();
                 });
 
                 this.chestPlayed = true;
@@ -444,17 +423,23 @@ class PowerUp extends Phaser.Scene {
 
     setText(){
         //setting play text configuration
-        // let beginConfig = {
-        //     fontFamily: 'joystix',
-        //     fontSize: '60px',
-        //     color: '#ffbf0f',
-        //     padding: {
-        //         top: 5,
-        //         bottom: 5,
-        //     },
-        // }
+        let textConfig = {
+            fontFamily: 'joystix',
+            fontSize: '20px',
+            color: '#7a5f46',
+            align: 'center',
+            wordWrap: { 
+                width: game.config.width - 100
+            },
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
 
-        // //adding play text
-        // this.begin = this.add.text(game.config.width/2, game.config.height - 100, 'PLAY', beginConfig).setOrigin(0.5);
+        //adding play text
+        this.add.text(game.config.width/2, 50, this.text, textConfig).setOrigin(0.5);
+        textConfig.color = '#e38222';
+        this.add.text(game.config.width/2, 100, this.textGoal, textConfig).setOrigin(0.5);
     }
 }

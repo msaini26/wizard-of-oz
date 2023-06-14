@@ -89,18 +89,18 @@ class Title extends Phaser.Scene {
             repeat: -1,
         });
 
+        // this.tweens.add({
+        //     targets: this.click_play,
+        //     alpha: { from: 1, to: 0.5 },
+        //     ease: 'Sine.InOut',
+        //     duration: 500,
+        //     repeat: -1,
+        //     // yoyo: true
+        //   });
+
     }
 
     update(){
-
-        this.tweens.add({
-            targets: this.click_play,
-            alpha: { from: 1, to: 0.5 },
-            ease: 'Sine.InOut',
-            duration: 500,
-            repeat: -1,
-            // yoyo: true
-          });
 
 
         // if mouse is hovering over text
