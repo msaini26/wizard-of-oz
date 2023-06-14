@@ -16,7 +16,7 @@ class PowerUp extends Phaser.Scene {
         this.load.image("fall", "./player/Fall.png");
         this.load.image("jump", "./player/Jump.png");
 
-        this.load.image('coin', './powerups/png/coin.png');
+        // this.load.image('coin', './powerups/png/coin.png');
 
         // treasure or power up container
         this.load.atlas("chest", "./powerups/png/chest.png", "./powerups/json/chest.json");
@@ -25,6 +25,11 @@ class PowerUp extends Phaser.Scene {
         this.load.atlas("friends", "./powerups/png/friends.png", "./powerups/json/friends.json");
         this.load.atlas("monkey", "./powerups/png/monkey.png", "./powerups//json/monkey.json");
         this.load.atlas("lion", "./powerups/png/lion.png", "./powerups/json/lion.json");
+
+        //collectable items
+        this.load.atlas("heart", "./powerups/png/heart.png", "./powerups/json/heart.json");
+        this.load.atlas("fire", "./powerups/png/fire.png", "./powerups/json/fire.json");
+        this.load.image('brain', './powerups/png/brain.png');
 
     }
 
@@ -36,8 +41,8 @@ class PowerUp extends Phaser.Scene {
         this.MAX_JUMPS = 3;
         this.SCROLL_SPEED = 4;
         this.physics.world.gravity.y = 3000;
-        this.platformSpeed = -200;
-        this.platformSpeedMax = -700;
+        this.itemSpeed = -200;
+        this.itemSpeedMax = -700;
 
         // define W,A,S,D keys for moving
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -68,6 +73,11 @@ class PowerUp extends Phaser.Scene {
 
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
+
+        //keeps track of other colored platforms (different from player color)
+        this.itemGroup = this.add.group({
+            runChildUpdate: true    // make sure update runs on group children
+        });
 
         this.anims.create({
             key: 'chest1',
@@ -399,6 +409,7 @@ class PowerUp extends Phaser.Scene {
         
     }
 
+    //setting each image so once it spins, it lands on the frame where the player is faced forward
     getPowerFront(){
         if(this.powerAnim === 'tincan'){
             this.powerFront = 4;
@@ -441,5 +452,26 @@ class PowerUp extends Phaser.Scene {
         this.add.text(game.config.width/2, 50, this.text, textConfig).setOrigin(0.5);
         textConfig.color = '#e38222';
         this.add.text(game.config.width/2, 100, this.textGoal, textConfig).setOrigin(0.5);
+    }
+
+    dropCollectables() {
+        if(this.powerAnim === 'tincan'){
+            
+        } else if(this.powerAnim === 'scarecrow'){
+            
+        } else if(this.powerAnim === 'lion'){
+            
+        } else if(this.powerAnim === 'monkey'){
+            
+        }
+    }
+
+    addItem() {
+        //randomize speed of platforms
+        let speedVariance =  Phaser.Math.Between(0, 50);
+
+        this.item = new Item(this, this.itemSpeed - speedVariance);
+        this.itemGroup.add(this.item);
+
     }
 }
