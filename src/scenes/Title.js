@@ -123,6 +123,7 @@ class Title extends Phaser.Scene {
             // yoyo: true
           });
 
+        // credits scene
         if (Phaser.Input.Keyboard.JustDown(keyC)) {
             this.sound.play('sfx_select'); // play selector sound
             this.scene.start('creditsScene'); // begin first level
