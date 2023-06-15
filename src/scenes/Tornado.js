@@ -43,21 +43,21 @@ class Tornado extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
 
         //setting text configuration
-        let textConfig = {
-            fontFamily: 'joystix',
-            fontSize: '20px',
-            color: '#7a5f46',
-            align: 'center',
-            wordWrap: { 
-                width: game.config.width - 100
-            },
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-        }
+        // let textConfig = {
+        //     fontFamily: 'joystix',
+        //     fontSize: '20px',
+        //     color: '#7a5f46',
+        //     align: 'center',
+        //     wordWrap: { 
+        //         width: game.config.width - 100
+        //     },
+        //     padding: {
+        //         top: 5,
+        //         bottom: 5,
+        //     },
+        // }
 
-        this.directions = this.add.text(game.config.width/2, 50, "Jump as far as you can before you are swallowed by the tornado to Oz. Try triple jumping to help you out", textConfig).setOrigin(0.5);
+        // this.directions = this.add.text(game.config.width/2, 50, "Jump as far as you can before you are swallowed by the tornado to Oz. Try triple jumping to help you out", textConfig).setOrigin(0.5);
 
         //keeps track of other colored platforms (different from player color)
         this.platformGroup = this.add.group({
@@ -80,7 +80,7 @@ class Tornado extends Phaser.Scene {
         this.startGround.body.immovable = true; //set it so ground isn't affected by physics
         this.startGround.body.allowGravity = false; //set it so the ground doesn't fall 
 
-        this.safety_net = this.add.text(game.config.width/2, 420, "Beware not all platforms are as they seem", textConfig).setOrigin(0.5).setInteractive();
+        // this.safety_net = this.add.text(game.config.width/2, 420, "Beware not all platforms are as they seem", textConfig).setOrigin(0.5).setInteractive();
 
         // delay by 3.5 seconds and then fade out beware text
         this.time.delayedCall(3500, () => { 

@@ -268,7 +268,7 @@ class PowerUp extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.startRules = this.add.text(game.config.width/2, 100, 'Hit one of the chests to see which friend you meet!', textConfig).setOrigin(0.5);
+        this.startRules = this.add.text(game.config.width/2, 100, 'You have traveled to the Land of Oz. Hit one of the chests to see which friend you meet!', textConfig).setOrigin(0.5);
 
         this.imgName = '';
         this.setItemImage();
