@@ -26,7 +26,7 @@ class PowerUp extends Phaser.Scene {
         this.load.atlas("lion", "./powerups/png/lion.png", "./powerups/json/lion.json");
 
         //loading collectable items
-        this.load.image('brain', './powerups/png/brain.png');
+        this.load.image('brain', './powerups/png/scarecrow-brain.png');
         this.load.image('heart', './powerups/png/heart.png');
         this.load.image('fire', './powerups/png/fire.png');
 
