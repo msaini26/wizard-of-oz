@@ -36,7 +36,7 @@ class GameOver extends Phaser.Scene {
             fontFamily: 'Helvetica Neue',
             fontSize: '45px',
             fontStyle: 'bold',
-            color: '#ffa8db',
+            color: '#7a5f46',
             // align: 'right',
             padding: {
                 top: 5,
@@ -46,7 +46,7 @@ class GameOver extends Phaser.Scene {
         }
 
         this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/3, 'There is no place like home...Kansas is home...bye Oz', titleConfig).setOrigin(0.5).setScale(0.5);
+        this.add.text(game.config.width/2, game.config.height/3, 'There is no place like home...', titleConfig).setOrigin(0.5).setScale(0.5);
 
 
          //setting play text configuration
@@ -62,8 +62,8 @@ class GameOver extends Phaser.Scene {
         }
 
         // name credits
-        var name_credits = this.add.text(game.config.width/2, game.config.height - 30, 'By: Mansi Saini & Rebecca Zhao', subConfig).setOrigin(0.5);
-        this.credits = this.add.text(20, 40, 'Press (C) for Credits', subConfig);
+        // var name_credits = this.add.text(game.config.width/2, game.config.height - 30, 'By: Mansi Saini & Rebecca Zhao', subConfig).setOrigin(0.5);
+        // this.credits = this.add.text(20, 40, 'Press (C) for Credits', subConfig);
 
 
         // play again
@@ -72,10 +72,10 @@ class GameOver extends Phaser.Scene {
 
     update(){
         // credits scene
-        if (Phaser.Input.Keyboard.JustDown(keyC)) {
-            this.sound.play('sfx_select'); // play selector sound
-            this.scene.start('creditsScene'); // begin first level
-        }
+        // if (Phaser.Input.Keyboard.JustDown(keyC)) {
+        //     this.sound.play('sfx_select'); // play selector sound
+        //     this.scene.start('creditsScene'); // begin first level
+        // }
 
         // restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
