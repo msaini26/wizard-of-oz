@@ -20,7 +20,7 @@ class Tornado extends Phaser.Scene {
         this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
 
         //loading background
-        this.load.image('background','./background/background2.png');
+        this.load.image('background','./background/background.png');
 
         this.load.image("brick", "./terrain/brick.png");
         

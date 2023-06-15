@@ -171,7 +171,7 @@ class Title extends Phaser.Scene {
             this.scene.stop('titleScene');
 
             //move to next scene
-            this.scene.start('tornadoScene');
+            this.scene.start('controlsScene');
 
         });
     }
