@@ -26,14 +26,14 @@ class Tornado extends Phaser.Scene {
         this.load.image("brick", "./terrain/brick.png");
         
         // load in tornado animation
-        // this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
         this.load.atlas("tornado", './transitions/temp.png', './transitions/json/temp.json');
 
+        //load tornado music
         this.load.audio('tornado_music', './assets/audio/cinematic.mp3');
     }
 
     create() {
-        //setting variables to track speed of platforms and jump/walk speed
+        //setting constant variables for physics
         this.ACCELERATION = 600;
         this.DRAG = 700; 
         this.JUMP_VELOCITY = -700;
@@ -59,14 +59,8 @@ class Tornado extends Phaser.Scene {
         //adding background tile
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
 
-        //keeps track of other colored platforms (different from player color)
+        //creating group of platforms
         this.platformGroup = this.add.group({
-            runChildUpdate: true    // make sure update runs on group children
-        });
-
-
-        //keeps track of which platforms player has already landed on so we don't add points multiple times
-        this.platformLanded = this.add.group({
             runChildUpdate: true    // make sure update runs on group children
         });
 
@@ -114,16 +108,7 @@ class Tornado extends Phaser.Scene {
             repeat: -1
         });
 
-        //creating jumping animation
-        // this.anims.create({
-        //     key: 'jump',
-        //     frameRate: 15,
-        //     frames: this.anims.generateFrameNames("jump", { 
-        //         prefix: 'sprite',
-        //         start: 1, 
-        //         end: 19 }),
-        //     repeat: 0
-        // });
+        //setting jump animation
         this.anims.create({
             key: 'jump',
             defaultTextureKey: 'jump',
@@ -133,7 +118,7 @@ class Tornado extends Phaser.Scene {
             repeat: -1
         });
 
-        //creating event to increase speed as the player plays (increasing difficulty)
+        //creating event to increase speed of platforms as the player plays (increasing difficulty)
         this.difficultyTimer = this.time.addEvent({
             delay: 5000,
             callback: this.increaseSpeed,
@@ -141,13 +126,12 @@ class Tornado extends Phaser.Scene {
             loop: true
         });
 
-
         //used to keep track of player input
         cursors = this.input.keyboard.createCursorKeys();
 
         //check collision of player and the starting platform
         this.physics.add.collider(this.player, this.startGround);
-
+        //check collision of player and platforms
         this.physics.add.collider(this.player, this.platformGroup);
 
         //creating tornado animation (after player finishes the level)
@@ -161,13 +145,13 @@ class Tornado extends Phaser.Scene {
             repeat: -1
         });
 
-
         // create tornado sprite
         this.tornado = this.physics.add.sprite(-300, 300, 'tornado').setScale(12);
         this.tornado.setImmovable();
         this.tornado.body.allowGravity = false;
-        this.isPlaying = false;
+        this.isPlaying = false; //boolean to see if tornado is playing
 
+        //starts spawning in tornado once player hits 30 seconds
         this.time.delayedCall(30000, () => {
             this.playTornado();
             this.checkTornadoCollide();
@@ -176,34 +160,30 @@ class Tornado extends Phaser.Scene {
     }
 
     update(){
-
+        //if player is out of bounds
         if(this.outsideBounds()){
-            // this.blobBackgroundMusic.stop(); //stop the background music
-            if(!this.isPlaying){
-                this.playTornado();
+            if(!this.isPlaying){ //check if tornado is playing
+                this.playTornado(); //play tornado
             }
+            //once tornado hits end of screen
             if(this.tornado.x > game.config.width - 400){
-                this.time.delayedCall(1000, () => { 
-                    this.wind.stop();
-                    this.tornadoMusic.stop();
-                    this.scene.start('powerUpScene'); 
-                }); //delay start of game over scene by 1 second
-                // this.wind.stop();
+                this.time.delayedCall(1000, () => { //delay by 1 second
+                    this.wind.stop(); //stop wind sound
+                    this.tornadoMusic.stop(); //stop music
+                    this.scene.start('powerUpScene'); //go to next scene
+                }); 
             }
-            // this.playTornado();
-            // this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
         }
 
         //scrolling background
         this.background.tilePositionX += 2;
 
-
         //adjusting acceleration, drag, and animation to match player input
-        if(cursors.left.isDown) { //if player presses left arrow key or A key
+        if(cursors.left.isDown) { //if player presses left arrow key
             this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
             this.player.setFlip(true, false); //flip the animation so it faces left
             this.player.anims.play('run', true); //play the walking animation
-        } else if(cursors.right.isDown) { //if player presses right arrow key or D key
+        } else if(cursors.right.isDown) { //if player presses right arrow key
             this.player.body.setAccelerationX(this.ACCELERATION); //move player right
             this.player.resetFlip(); //reset animation to face right
             this.player.anims.play('run', true); //play the walking animation
@@ -220,37 +200,34 @@ class Tornado extends Phaser.Scene {
 	    if(this.player.onGround) {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
-	    } else {
-            // this.player.anims.play('jump'); 
-            // this.player.setTexture('jumping'); //if player is not on platform, they are in the air i.e. jumping
 	    }
-
-        
 
         //if up arrow key is pressed and we have not reached max jumps yet
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
-            this.player.setTexture('jumping');
+            this.player.setTexture('jumping'); //set jump image
 	    } 
 
         //if player is jumping and up arrow is pressed
         if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
 	    	this.jumps--; //subtract number of jumps player has left
 	    	this.jumping = false; //set jumping to false
-            // this.sound.play('boing'); //play boing sound effect
 	    }
     }
 
+    //method to constantly spawn new platforms
     addPlatform() {
         //randomize speed of platforms
         let speedVariance =  Phaser.Math.Between(0, 50);
 
+        //creating new platforms
         this.platform = new Platform(this, this.platformSpeed - speedVariance);
-        this.platformGroup.add(this.platform);
+        this.platformGroup.add(this.platform); //adding to group
 
     }
 
+    //increases speed of platforms until it reaches max
     increaseSpeed() {
         //increase speed of platforms to make it increasingly harder to play
         if(this.platformSpeed >= this.platformSpeedMax){ //increase speed of platforms until it reaches max
@@ -258,8 +235,8 @@ class Tornado extends Phaser.Scene {
         }
     }
 
+    //checks if player has fallen outside bounds of screen
     outsideBounds() {
-        //checks if player has fallen outside bounds of screen
         if(this.player.y > game.config.height + 130){
                 this.jumps = -1; //restrict player from jumping after falling out of bounds
 	    	    this.jumping = false; //set jumping to false
@@ -269,31 +246,33 @@ class Tornado extends Phaser.Scene {
         }
     }
 
+    //play tornado animations with sound effect
     playTornado() {
         // set music configurations
         let tornadoConfig = {
             mute: false,
             volume: 1.5, 
-            loop: false, //looping music so it is never ending
+            loop: false, 
             rate: 2,
             delay: 0 
         };
 
-        // set background game music
+        // set wind sound
         this.wind = this.sound.add('wind', tornadoConfig);
         this.wind.play(tornadoConfig);
-        // this.sound.play('wind');
-        this.tornado.anims.play('spinning-tornado');
-        this.tornado.setVelocityX(200);
-        this.isPlaying = true;
+
+        this.tornado.anims.play('spinning-tornado'); //play animation
+        this.tornado.setVelocityX(200); //set x velocity so tornado slides across screen
+        this.isPlaying = true; //set isPlaying to true
     }
 
+    //check if tornado collides with player
     checkTornadoCollide(){
         this.physics.add.collider(this.player, this.tornado, (player, tornado) =>{
             this.time.delayedCall(1000, () => { 
-                this.wind.stop();
-                this.tornadoMusic.stop();
-                this.scene.start('powerUpScene'); 
+                this.wind.stop(); //stop sound effect
+                this.tornadoMusic.stop(); //stop music
+                this.scene.start('powerUpScene'); //go to next scene
             });
         });
     }
