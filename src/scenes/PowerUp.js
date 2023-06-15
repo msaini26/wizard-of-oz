@@ -257,6 +257,7 @@ class PowerUp extends Phaser.Scene {
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
         this.player.anims.play('idle', true); 
+        this.player.body.setSize(this.player.width/1.5);  
 
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
@@ -292,6 +293,7 @@ class PowerUp extends Phaser.Scene {
         this.checkStart = false;
         this.checkNext = false;
         this.clicked = false;
+        this.checkingScore = true;
 
         this.score = 0;
 
@@ -301,6 +303,7 @@ class PowerUp extends Phaser.Scene {
     update() {
         if(this.checkNext){
             this.updateNext();
+            // console.log('should be clickable');
         }
 
         if(this.checkStart){
@@ -314,6 +317,10 @@ class PowerUp extends Phaser.Scene {
         if(this.startFall){
             this.addItem(this.imgName); 
             this.collidesItem();
+        }
+
+        if(this.checkingScore){
+            this.displayScore();
         }
 
         // left arrow key or the 'A' key
@@ -563,8 +570,10 @@ class PowerUp extends Phaser.Scene {
     }
 
     updateNext() {
+        // console.log('in updateNext');
         //if mouse is hovering text
         this.next.on('pointerover', () => {
+            // console.log('hovering over');
             this.next.setTint(0xcf0000); //set tint
         });
         
@@ -575,6 +584,7 @@ class PowerUp extends Phaser.Scene {
         
         //if mouse clicks text
         this.next.on('pointerdown', () => {
+            // console.log("clicked");
             this.next.clearTint();
             //if sound hasn't played yet
             if(!this.clicked){
@@ -613,9 +623,72 @@ class PowerUp extends Phaser.Scene {
         });
     }
 
-    checkScore() {
-        if(this.score >= 10){
+    displayScore() {
+        if(this.count <= 0){
+            //setting text configuration
+            let textConfig = {
+                fontFamily: 'joystix',
+                fontSize: '20px',
+                color: '#7a5f46',
+                align: 'center',
+                wordWrap: { 
+                    width: game.config.width - 100
+                },
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+            }
             
+
+            this.time.delayedCall(2000, () => {
+                //adding text description of player and goal
+                this.add.text(game.config.width/2, 200, 'You collected a total of       ' + this.imgName + 's', textConfig).setOrigin(0.5);
+                textConfig.color = '#e38222';
+                textConfig.fontFamily = 'ka1';
+                textConfig.fontSize = '30px';
+                this.add.text(game.config.width/2 + 150, 200, this.score, textConfig).setOrigin(0.5);
+                this.time.delayedCall(1000, () => {
+                    this.checkScore();
+                    // this.showScore = false;
+                }, null, this);
+            }, null, this);
+
         }
+    }
+
+    checkScore() {
+        //setting text configuration
+        let textConfig = {
+            fontFamily: 'joystix',
+            fontSize: '20px',
+            color: '#e38222',
+            align: 'center',
+            wordWrap: { 
+                width: game.config.width - 100
+            },
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+
+        if(this.score >= 10){
+            hasPowerUp = true;
+            this.add.text(game.config.width/2, 275, 'Congrats! You collected enough items to have a power up next round.', textConfig).setOrigin(0.5);
+        } else {
+            hasPowerUp = false;
+            this.add.text(game.config.width/2, 275, 'Awww, you didn\'t collect enough items. Move on to the next round with no benefit', textConfig).setOrigin(0.5);
+        }
+
+        textConfig.fontSize = '30px';
+        textConfig.fontFamily = 'ka1';
+        textConfig.color = '#f54242';
+        this.next = this.add.text(game.config.width - 175, 350, 'NEXT', textConfig);
+        this.next.setInteractive();
+        this.checkNext = true;
+        this.checkingScore = false;
+        this.clicked = false;
+
     }
 }

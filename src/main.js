@@ -72,3 +72,5 @@ let keyW, keyA, keyS, keyD;
 let keyC; 
 
 let introMusic;
+
+let hasPowerUp;
