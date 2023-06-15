@@ -108,7 +108,7 @@ class Credits extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) { //if key left is pressed
             this.sound.play('sfx_select'); // play selector sound
-            this.scene.stop('creditsScene'); //stop credit scene
+            // this.scene.stop('creditsScene'); //stop credit scene
             this.scene.start('titleScene'); // go back to title scene
             introMusic.stop(); //stop music
         }
