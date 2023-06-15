@@ -8,12 +8,12 @@ class Credits extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/audio/select.mp3');
 
         // title screen background
-        this.load.image('background', './assets/Background/2.png');
+        this.load.image('credits_background', './assets/Background/2.png');
     }
 
     create() {
 
-        this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setScale(1.75).setOrigin(0, 0);
+        this.credit_background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'credits_background').setScale(1.75).setOrigin(0, 0);
 
         let titleConfig = {
             fontFamily: 'joystix', // set font
@@ -96,6 +96,7 @@ class Credits extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.sound.play('sfx_select'); // play selector sound
+            this.scene.stop('creditsScene');
             this.scene.start('titleScene'); // begin first level
             introMusic.stop();
         }

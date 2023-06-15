@@ -168,6 +168,8 @@ class Title extends Phaser.Scene {
                 this.clicked = true; //set clicked to true
             }
 
+            this.scene.stop('titleScene');
+
             //move to next scene
             this.scene.start('tornadoScene');
 
