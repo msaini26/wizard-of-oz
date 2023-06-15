@@ -46,6 +46,7 @@ class GameOver extends Phaser.Scene {
         }
 
         this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/3, 'There is no place like home...Kansas is home...bye Oz', titleConfig).setOrigin(0.5).setScale(0.5);
 
 
          //setting play text configuration
