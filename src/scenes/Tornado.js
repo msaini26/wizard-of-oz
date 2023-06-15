@@ -236,6 +236,7 @@ class Tornado extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
+            // this.player.anims.play('jump', true); 
         //     this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 

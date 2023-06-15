@@ -37,7 +37,7 @@ class PowerUp extends Phaser.Scene {
 
     // create background and game elements
     create() {
-        this.ACCELERATION = 800;
+        this.ACCELERATION = 1000;
         this.DRAG = 900; 
         this.JUMP_VELOCITY = -700;
         this.MAX_JUMPS = 3;
@@ -81,12 +81,6 @@ class PowerUp extends Phaser.Scene {
             runChildUpdate: true    // make sure update runs on group children
         });
 
-        this.maxItems = 10;
-
-        // this.time.delayedCall(1000, () => { 
-        //     this.addItem(); 
-        // });
-
         this.anims.create({
             key: 'chest1',
             frameRate: 10,
@@ -123,7 +117,6 @@ class PowerUp extends Phaser.Scene {
         });
 
         this.chest2 = this.physics.add.sprite(350, 250, 'chest', 'sprite11').setScale(4);
-        // this.chest2.anims.play("chest2");
         // Change the size of the bounding box.
         this.chest2.setSize(30, 30);
         // Change the location of the bounding box.
@@ -147,7 +140,6 @@ class PowerUp extends Phaser.Scene {
         });
 
         this.chest3 = this.physics.add.sprite(500, 250, 'chest', 'sprite21').setScale(4);
-        // this.chest3.anims.play("chest3");
         // Change the size of the bounding box.
         this.chest3.setSize(30, 30);
         // Change the location of the bounding box.
@@ -172,7 +164,6 @@ class PowerUp extends Phaser.Scene {
         });
 
         this.chest4 = this.physics.add.sprite(650, 250, 'chest', 'sprite31').setScale(4);
-        // this.chest4.anims.play("chest4");
         // Change the size of the bounding box.
         this.chest4.setSize(30, 30);
         // Change the location of the bounding box.
@@ -269,18 +260,20 @@ class PowerUp extends Phaser.Scene {
 
 
         //title text configuration
-        let titleConfig = {
-            fontFamily: 'Helvetica Neue',
-            fontSize: '45px',
-            fontStyle: 'bold',
-            color: '#ffa8db',
-            // align: 'right',
+        let textConfig = {
+            fontFamily: 'joystix',
+            fontSize: '20px',
+            color: '#e38222',
+            align: 'center',
+            wordWrap: { 
+                width: game.config.width - 100
+            },
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 0
         }
+        this.startRules = this.add.text(game.config.width/2, 100, 'Hit one of the chests to see which friend you meet!', textConfig).setOrigin(0.5);
 
         this.imgName = '';
         this.setItemImage();
@@ -337,6 +330,7 @@ class PowerUp extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
+            // this.player.anims.play('jump');
             // this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
@@ -353,24 +347,12 @@ class PowerUp extends Phaser.Scene {
             // this.sound.play('boing'); //play boing sound effect
 	    }
 
-        // move to next scene
-        // if (this.outsideBounds()) {
-        //     this.scene.start('bossBattleScene');
-        // }
     }
-
-    // outsideBounds() {
-    //     //checks if player has fallen outside bounds of screen
-    //     if(this.player.x > game.config.width - 40){
-    //             return true; //return true if player is outside
-    //     } else{
-    //         return false; //return false if player is inside bounds
-    //     }
-    // }
 
     updateChest() {
         this.physics.add.collider(this.player, this.chest1, (player, chest) =>{
             if(!this.chestPlayed){
+                this.startRules.visible = false;
                 this.chest2.destroy();
                 this.chest3.destroy();
                 this.chest4.destroy();
@@ -391,6 +373,7 @@ class PowerUp extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.chest2, (player, chest) =>{
             if(!this.chestPlayed){
+                this.startRules.visible = false;
                 this.chest1.destroy();
                 this.chest3.destroy();
                 this.chest4.destroy();
@@ -411,6 +394,7 @@ class PowerUp extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.chest3, (player, chest) =>{
             if(!this.chestPlayed){
+                this.startRules.visible = false;
                 this.chest1.destroy();
                 this.chest2.destroy();
                 this.chest4.destroy();
@@ -431,6 +415,7 @@ class PowerUp extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.chest4, (player, chest) =>{
             if(!this.chestPlayed){
+                this.startRules.visible = false;
                 this.chest1.destroy();
                 this.chest2.destroy();
                 this.chest3.destroy();
