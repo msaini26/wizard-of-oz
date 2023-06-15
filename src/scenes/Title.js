@@ -164,7 +164,7 @@ class Title extends Phaser.Scene {
                 this.clicked = true; //set clicked to true
             }
 
-            this.scene.stop('titleScene'); //stop title scene
+            // this.scene.stop('titleScene'); //stop title scene
 
             //move to next scene
             this.scene.start('controlsScene');
