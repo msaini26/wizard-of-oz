@@ -67,6 +67,23 @@ class BossBattle extends Phaser.Scene {
             repeat: -1
         });
 
+        //setting text configuration
+        let textConfig = {
+            fontFamily: 'joystix',
+            fontSize: '20px',
+            color: '#7a5f46',
+            align: 'center',
+            wordWrap: { 
+                width: game.config.width - 100
+            },
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+
+        this.boss_directions = this.add.text(game.config.width/2, 50, "Destroy the wicked witch of the west so you can go back home to Kansas!!", textConfig).setOrigin(0.5);
+
         // witch melting; after witch is killed 
         this.anims.create({
             key: 'witch-melting',
