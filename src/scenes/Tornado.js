@@ -25,7 +25,8 @@ class Tornado extends Phaser.Scene {
         this.load.image("brick", "./terrain/brick.png");
         
         // load in tornado animation
-        this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
+        // this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
+        this.load.atlas("tornado", './transitions/temp.png', './transitions/json/temp.json');
     }
 
     create() {
@@ -41,23 +42,6 @@ class Tornado extends Phaser.Scene {
 
         //adding background tile
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
-
-        //setting text configuration
-        // let textConfig = {
-        //     fontFamily: 'joystix',
-        //     fontSize: '20px',
-        //     color: '#7a5f46',
-        //     align: 'center',
-        //     wordWrap: { 
-        //         width: game.config.width - 100
-        //     },
-        //     padding: {
-        //         top: 5,
-        //         bottom: 5,
-        //     },
-        // }
-
-        // this.directions = this.add.text(game.config.width/2, 50, "Jump as far as you can before you are swallowed by the tornado to Oz. Try triple jumping to help you out", textConfig).setOrigin(0.5);
 
         //keeps track of other colored platforms (different from player color)
         this.platformGroup = this.add.group({
@@ -79,20 +63,6 @@ class Tornado extends Phaser.Scene {
         this.startGround = this.physics.add.sprite(-10, game.config.height - 75, 'brick').setOrigin(0);
         this.startGround.body.immovable = true; //set it so ground isn't affected by physics
         this.startGround.body.allowGravity = false; //set it so the ground doesn't fall 
-
-        // this.safety_net = this.add.text(game.config.width/2, 420, "Beware not all platforms are as they seem", textConfig).setOrigin(0.5).setInteractive();
-
-        // delay by 3.5 seconds and then fade out beware text
-        this.time.delayedCall(3500, () => { 
-            // fade beware text out
-            this.tweens.add({
-                targets: this.safety_net,
-                alpha: 0,
-                duration: 500,
-                ease: 'Power2'
-              }, this);
-
-        });
         
         // delay by 5 seconds and then destroy starting platform
         this.time.delayedCall(5000, () => { 
@@ -116,9 +86,6 @@ class Tornado extends Phaser.Scene {
         this.player.body.checkCollision.up = false; 
         this.player.body.checkCollision.left = false;
         this.player.body.checkCollision.right = false;
-
-        //initializing the score of player
-        this.score = 0;
 
         //creating walking animation (when player moves left and right)
         this.anims.create({
@@ -157,46 +124,29 @@ class Tornado extends Phaser.Scene {
         //check collision of player and the starting platform
         this.physics.add.collider(this.player, this.startGround);
 
+        this.physics.add.collider(this.player, this.platformGroup);
+
         //creating tornado animation (after player finishes the level)
         this.anims.create({
             key: 'spinning-tornado',
-            frameRate: 3,
+            frameRate: 15,
             frames: this.anims.generateFrameNames("tornado", { 
                 prefix: 'sprite',
                 start: 1, 
-                end: 4 }),
+                end: 8 }),
             repeat: -1
         });
 
 
         // create tornado sprite
-        this.tornado = this.add.sprite(350, 700, 'tornado');
-
-        // begin spinning tornado animation
-        this.time.delayedCall(29000, () => {
-            this.tornado.anims.play('spinning-tornado');
-        });
-
-        // manual animation to scale the tornado to take over screen
-        for (let i = 1; i < 6; i++) {
-            let time = 29000 + (i * 150); // scale each interval
-            this.time.delayedCall(time, () => {
-                this.tornado.scale += 1; // make tornado bigger
-                this.tornado.y -= 50;
-
-                
-            });
-        };
-
-        // after tornado moves up, move it right
-        this.time.delayedCall(29000, () => {
-            for (let x = 1; x < 5; x++) {
-                    this.tornado.x += 25;
-            }
-        });
+        this.tornado = this.physics.add.sprite(-300, 300, 'tornado').setScale(12);
+        this.tornado.setImmovable();
+        this.tornado.body.allowGravity = false;
+        this.isPlaying = false;
 
         this.time.delayedCall(30000, () => {
-            this.scene.start('powerUpScene');
+            this.playTornado();
+            this.checkTornadoCollide();
         }, null, this);
 
     }
@@ -205,13 +155,19 @@ class Tornado extends Phaser.Scene {
 
         if(this.outsideBounds()){
             // this.blobBackgroundMusic.stop(); //stop the background music
-            this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
+            if(!this.isPlaying){
+                this.playTornado();
+            }
+            if(this.tornado.x > game.config.width - 400){
+                this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
+            }
+            // this.playTornado();
+            // this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
         }
 
         //scrolling background
         this.background.tilePositionX += 2;
 
-        this.updateScore();
 
         //adjusting acceleration, drag, and animation to match player input
         if(cursors.left.isDown) { //if player presses left arrow key or A key
@@ -268,18 +224,8 @@ class Tornado extends Phaser.Scene {
     increaseSpeed() {
         //increase speed of platforms to make it increasingly harder to play
         if(this.platformSpeed >= this.platformSpeedMax){ //increase speed of platforms until it reaches max
-            this.platformSpeed -= 80; 
+            this.platformSpeed -= 60; 
         }
-    }
-
-    updateScore() {
-        //checks if the player collides with a different colored platform
-        this.physics.add.collider(this.player, this.platformGroup, (player, platform) =>{
-            //if the player hasn't collided with this platform yet
-            if(!this.platformLanded.contains(platform)) {
-                this.platformLanded.add(platform); //add it to the already landed platforms group
-            }
-        });
     }
 
     outsideBounds() {
@@ -292,4 +238,20 @@ class Tornado extends Phaser.Scene {
             return false; //return false if player is inside bounds
         }
     }
+
+    playTornado() {
+        this.tornado.anims.play('spinning-tornado');
+        this.tornado.setVelocityX(200);
+        this.isPlaying = true;
+    }
+
+    checkTornadoCollide(){
+        this.physics.add.collider(this.player, this.tornado, (player, tornado) =>{
+            this.time.delayedCall(1000, () => { 
+                this.scene.start('powerUpScene'); 
+            });
+        });
+    }
+
+
 }
