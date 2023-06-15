@@ -46,6 +46,12 @@ class PowerUp extends Phaser.Scene {
         // this.itemSpeed = 200;
         // this.itemSpeedMax = 700;
 
+        // define W,A,S,D keys for moving
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
         //creating tilemap
         const map = this.add.tilemap('YellowBrickJSON');
 
@@ -251,7 +257,6 @@ class PowerUp extends Phaser.Scene {
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
         this.player.anims.play('idle', true); 
-        this.player.body.setSize(this.player.width/1.5);  
 
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
@@ -287,7 +292,6 @@ class PowerUp extends Phaser.Scene {
         this.checkStart = false;
         this.checkNext = false;
         this.clicked = false;
-        this.checkingScore = true;
 
         this.score = 0;
 
@@ -297,7 +301,6 @@ class PowerUp extends Phaser.Scene {
     update() {
         if(this.checkNext){
             this.updateNext();
-            // console.log('should be clickable');
         }
 
         if(this.checkStart){
@@ -313,20 +316,14 @@ class PowerUp extends Phaser.Scene {
             this.collidesItem();
         }
 
-        if(this.checkingScore){
-            this.displayScore();
-        }
-
         // left arrow key or the 'A' key
-        if(cursors.left.isDown){
+        if(cursors.left.isDown || Phaser.Input.Keyboard.JustDown(keyA)){
             this.player.body.setAccelerationX(-this.ACCELERATION); //make player move left
             this.player.setFlip(true, false); //flip the animation so it faces right
             this.player.anims.play('run', true); //play the walking animation
-        } else if(cursors.right.isDown) { //if player presses right arrow key or uses the 'D' key
+        } else if(cursors.right.isDown || Phaser.Input.Keyboard.JustDown(keyD)) { //if player presses right arrow key or uses the 'D' key
             this.player.body.setAccelerationX(this.ACCELERATION); //move player right
             this.player.resetFlip(); //reset animation to face left
-
-
             this.player.anims.play('run', true); //play the walking animation
         } else {
             this.player.body.setAccelerationX(0); // set acceleration to 0 so DRAG will take over
@@ -344,14 +341,13 @@ class PowerUp extends Phaser.Scene {
 	    }
 
         //if up arrow key is pressed and we have not reached max jumps yet
-        if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
+        if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150) || Phaser.Input.Keyboard.DownDuration(keyW, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
-            this.player.anims.play('jump', true);
 	    } 
 
         //if player is jumping and up arrow is pressed
-        if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
+        if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up) || Phaser.Input.Keyboard.DownDuration(keyW, 150)) {
 	    	this.jumps--; //subtract number of jumps player has left
 	    	this.jumping = false; //set jumping to false
             // this.sound.play('boing'); //play boing sound effect
@@ -564,10 +560,8 @@ class PowerUp extends Phaser.Scene {
     }
 
     updateNext() {
-        // console.log('in updateNext');
         //if mouse is hovering text
         this.next.on('pointerover', () => {
-            // console.log('hovering over');
             this.next.setTint(0xcf0000); //set tint
         });
         
@@ -578,7 +572,6 @@ class PowerUp extends Phaser.Scene {
         
         //if mouse clicks text
         this.next.on('pointerdown', () => {
-            // console.log("clicked");
             this.next.clearTint();
             //if sound hasn't played yet
             if(!this.clicked){
@@ -617,72 +610,9 @@ class PowerUp extends Phaser.Scene {
         });
     }
 
-    displayScore() {
-        if(this.count <= 0){
-            //setting text configuration
-            let textConfig = {
-                fontFamily: 'joystix',
-                fontSize: '20px',
-                color: '#7a5f46',
-                align: 'center',
-                wordWrap: { 
-                    width: game.config.width - 100
-                },
-                padding: {
-                    top: 5,
-                    bottom: 5,
-                },
-            }
-            
-
-            this.time.delayedCall(2000, () => {
-                //adding text description of player and goal
-                this.add.text(game.config.width/2, 200, 'You collected a total of       ' + this.imgName + 's', textConfig).setOrigin(0.5);
-                textConfig.color = '#e38222';
-                textConfig.fontFamily = 'ka1';
-                textConfig.fontSize = '30px';
-                this.add.text(game.config.width/2 + 150, 200, this.score, textConfig).setOrigin(0.5);
-                this.time.delayedCall(1000, () => {
-                    this.checkScore();
-                    // this.showScore = false;
-                }, null, this);
-            }, null, this);
-
-        }
-    }
-
     checkScore() {
-        //setting text configuration
-        let textConfig = {
-            fontFamily: 'joystix',
-            fontSize: '20px',
-            color: '#e38222',
-            align: 'center',
-            wordWrap: { 
-                width: game.config.width - 100
-            },
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-        }
-
         if(this.score >= 10){
-            hasPowerUp = true;
-            this.add.text(game.config.width/2, 275, 'Congrats! You collected enough items to have a power up next round.', textConfig).setOrigin(0.5);
-        } else {
-            hasPowerUp = false;
-            this.add.text(game.config.width/2, 275, 'Awww, you didn\'t collect enough items. Move on to the next round with no benefit', textConfig).setOrigin(0.5);
+            
         }
-
-        textConfig.fontSize = '30px';
-        textConfig.fontFamily = 'ka1';
-        textConfig.color = '#f54242';
-        this.next = this.add.text(game.config.width - 175, 350, 'NEXT', textConfig);
-        this.next.setInteractive();
-        this.checkNext = true;
-        this.checkingScore = false;
-        this.clicked = false;
-
     }
 }
