@@ -61,13 +61,9 @@ class Title extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            // wordWrap: {
-            //     width: 700
-            // },
         }
-
-        
-        //setting play text configuration
+       
+        //sub text configuration
         let subConfig = {
             fontFamily: 'joystix',
             fontSize: '30px',
@@ -79,14 +75,17 @@ class Title extends Phaser.Scene {
             },
         }
 
+        //adding in created by text
         var name_credits = this.add.text(game.config.width/2, game.config.height - 30, 'By: Mansi Saini & Rebecca Zhao', subConfig).setOrigin(0.5);
+       
+        //adding in text to see credits
         subConfig.color = '#ad9165';
         this.credits = this.add.text(5, 10, 'Press (C) for Credits', subConfig);
 
-
-
         //adding text for title
         this.title_text = this.add.text(game.config.width/2, 100, 'Adventures in Oz', titleConfig).setOrigin(0.5);
+
+        //instruction text on how to start
         this.click_play = this.add.text(game.config.width/2, 350, 'Click play to continue', subConfig).setOrigin(0.5);
         this.click_play.setInteractive();
         
@@ -105,9 +104,10 @@ class Title extends Phaser.Scene {
         this.begin = this.add.text(game.config.width/2, game.config.height - 150, 'PLAY', beginConfig).setOrigin(0.5);
         this.begin.setInteractive(); //set interactive so mouse click works
 
-        //boolean to keep track that sound effect plays once
+        //boolean to keep track that sound effect plays once and is clicked once
         this.clicked = false;
         
+        //adding tweens for title
         this.tweens.add({
             targets: this.title_text,
             y: 200,
@@ -116,27 +116,9 @@ class Title extends Phaser.Scene {
             repeat: -1,
         });
 
-        // this.tweens.add({
-        //     targets: this.click_play,
-        //     alpha: { from: 1, to: 0.5 },
-        //     ease: 'Sine.InOut',
-        //     duration: 500,
-        //     repeat: -1,
-        //     // yoyo: true
-        //   });
-
     }
 
     update(){
-        this.tweens.add({
-            targets: this.click_play,
-            alpha: { from: 1, to: 0.5 },
-            ease: 'Sine.InOut',
-            duration: 500,
-            repeat: -1,
-            // yoyo: true
-          });
-
         // credits scene
         if (Phaser.Input.Keyboard.JustDown(keyC)) {
             this.sound.play('sfx_select'); // play selector sound
@@ -147,7 +129,7 @@ class Title extends Phaser.Scene {
         this.begin.on('pointerover', function (pointer) {
             this.begin.setTint(0xeb7805); //set tint to text
 
-            // squish text
+            // tweens to squish play text
             this.tweens.add({
               targets: this.begin,
               scaleX: '-=.2',
@@ -163,6 +145,7 @@ class Title extends Phaser.Scene {
       
             this.begin.clearTint(); //clear tint and revert to original
             
+            //tweens to enlarge play text
             this.tweens.add({
               targets: this.begin,
               scaleX: '+=.2',
@@ -175,14 +158,13 @@ class Title extends Phaser.Scene {
         
         //if mouse clicks on text
         this.begin.on('pointerdown', () => {
-            //if sound effect hasn't played yet
+            //if sound effect hasn't played yet and hasn't been clicked
             if(!this.clicked){
-                // play selector sound effect
                 this.sound.play('sfx_select'); // play selector sound
                 this.clicked = true; //set clicked to true
             }
 
-            this.scene.stop('titleScene');
+            this.scene.stop('titleScene'); //stop title scene
 
             //move to next scene
             this.scene.start('controlsScene');
