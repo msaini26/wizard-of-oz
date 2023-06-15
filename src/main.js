@@ -1,16 +1,26 @@
 /*
 Team Members: Mansi Saini & Rebecca Zhao
 
-TODO: put a green check next to each section
 === LIGHTS ===
 
-+5 The game runs/executes without critical errors or crashes. (Graders will use Chrome, so be sure you game works in that browser.)
+✅ +5 The game runs/executes without critical errors or crashes. (Graders will use Chrome, so be sure you game works in that browser.)
+    - deployed on vercel and no errors that crash the game
 
-+5 The game includes a title screen, some means to view credits, some means of "completion," and the ability to restart from within the game. (These criteria are judged relative to your specific game, genre, artistic tone, etc.)
+✅ +5 The game includes a title screen, some means to view credits, some means of "completion," and the ability to restart from within the game. (These criteria are judged relative to your specific game, genre, artistic tone, etc.)
+    - title screen has a bouncing effect with an emerald green background and gold to represent 
+    emerald city, press c to view the credits at the title screen or end of the game. after the 
+    player finishes the game, they can press r to restart the game
 
-+5 The player can learn the game's premise and controls from within the game, whether through a tutorial, instruction screen, or other diegetic means.
+✅ +5 The player can learn the game's premise and controls from within the game, whether through a tutorial, instruction screen, or other diegetic means.
+    - the player will realize that in the first level, they must jump from platform to platform 
+    because the first platform (their safety net) will disappear after 5 seconds, so they better
+    start moving. There are also directions to guide the player. In addition, in the power up, 
+    the player will see the chests and learn that they need to hit one of them, which will 
+    reveal their power up. The power up then has directions accordingly that will help them 
+    for the boss level, defeating the witches. In the boss level, there are clear direcions 
+    that tell the player to destroy the witches.
 
-+5 The game is playable to completion by a player of moderate skill. If your game is purposefully difficult and you're concerned that the grader won't be able to evaluate it properly, please provide a "grader mode" or debug menu that will allow us to see everything you've made, along with instructions for how to access that mode.
+✅ +5 The game is playable to completion by a player of moderate skill. If your game is purposefully difficult and you're concerned that the grader won't be able to evaluate it properly, please provide a "grader mode" or debug menu that will allow us to see everything you've made, along with instructions for how to access that mode.
 
 +5 Your project and code are well-structured and organized, including legible comments, appropriate data structures, sensible prefabs, meaningful variable names, logical scene structures, etc. (Nathan's examples are a good baseline.)
 
@@ -57,7 +67,7 @@ let config = {
         }
     },
 
-    scene: [Title, Credits, Controls, Tornado, PowerUp, BossBattle, GameOver, Play],
+    scene: [Title, Credits, Tornado, PowerUp, BossBattle, GameOver, Play],
 }
 
 let game = new Phaser.Game(config) // create phaser game
