@@ -61,7 +61,7 @@ class Controls extends Phaser.Scene {
         this.add.text(100, 375, 'You are playing as Dorothy who lives in Kansas. All of a sudden, a tornado occurs!', textConfig);
 
         textConfig.color = '#de3731';
-        this.add.text(100, 450, 'Try and escape the tornado by jumping on different platforms and last for 30 seconds for a fun surprise!', textConfig);
+        this.add.text(100, 450, 'Try and escape the tornado by jumping on different platforms and last for at least 30 seconds.', textConfig);
         
         titleConfig.color = '#8756cc';
         titleConfig.fontSize = '40px';

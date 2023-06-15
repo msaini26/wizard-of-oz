@@ -9,7 +9,7 @@ class Items extends Phaser.Physics.Arcade.Sprite{
         this.parentScene.physics.add.existing(this); //add to physics system
         // this.setVelocityY(velocity); //add velocity to platform to make it slide across screen
         // this.setImmovable(); //makes it so platform isn't affected by physics    
-        this.setScale(1.5);
+        this.setScale(2);
 
         this.newItem = true; //boolean to control barrier spawning nonstop
         this.hitHeight = false;

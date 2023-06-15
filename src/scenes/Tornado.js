@@ -18,6 +18,7 @@ class Tornado extends Phaser.Scene {
         this.load.atlas("jump", "./dorothy/png/other_jump.png", "./dorothy/json/other_jump.json");
         this.load.atlas("wallJump", "./player/wallJump.png", "./player/wallJump.json");
         this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
+        this.load.image('jumping','./dorothy/png/jump1.png');
 
         //loading background
         this.load.image('background','./background/background.png');
@@ -99,14 +100,22 @@ class Tornado extends Phaser.Scene {
         });
 
         //creating jumping animation
+        // this.anims.create({
+        //     key: 'jump',
+        //     frameRate: 15,
+        //     frames: this.anims.generateFrameNames("jump", { 
+        //         prefix: 'sprite',
+        //         start: 1, 
+        //         end: 19 }),
+        //     repeat: 0
+        // });
         this.anims.create({
             key: 'jump',
-            frameRate: 15,
-            frames: this.anims.generateFrameNames("jump", { 
-                prefix: 'sprite',
-                start: 1, 
-                end: 19 }),
-            // repeat: -1
+            defaultTextureKey: 'jump',
+            frames: [
+                { frame: 'sprite14' }
+            ],
+            repeat: -1
         });
 
         //creating event to increase speed as the player plays (increasing difficulty)
@@ -192,8 +201,8 @@ class Tornado extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
-            // this.player.anims.play('jump', true); 
-        //     this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
+            // this.player.anims.play('jump'); 
+            // this.player.setTexture('jumping'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
         
@@ -202,6 +211,7 @@ class Tornado extends Phaser.Scene {
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
+            this.player.setTexture('jumping');
 	    } 
 
         //if player is jumping and up arrow is pressed

@@ -16,6 +16,8 @@ class BossBattle extends Phaser.Scene {
          this.load.atlas('witch', 'enemy/witch.png', 'enemy/witch.json'); // import witch walking texture atlas
          this.load.atlas('boss-monkey', 'enemy/monkey.png', 'enemy/monkey.json'); // import monkey texture atlas
 
+         this.load.image('jumping','./dorothy/png/jump1.png');
+
     }
 
     // create background and game elements
@@ -216,6 +218,7 @@ class BossBattle extends Phaser.Scene {
             if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
                 this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
                 this.jumping = true; //set jumping to true
+                this.player.setTexture('jumping');
             } 
     
             //if player is jumping and up arrow is pressed

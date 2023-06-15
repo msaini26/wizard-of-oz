@@ -15,6 +15,7 @@ class PowerUp extends Phaser.Scene {
         //load player movements
         this.load.image("fall", "./player/Fall.png");
         this.load.image("jump", "./player/Jump.png");
+        this.load.image('jumping','./dorothy/png/jump1.png');
 
         // this.load.image('coin', './powerups/png/coin.png');
 
@@ -241,7 +242,7 @@ class PowerUp extends Phaser.Scene {
 
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
-        this.player.anims.play('idle', true); 
+        // this.player.anims.play('idle', true); 
         // this.player.body.setSize(this.player.width/1.5);  
 
         //setting collision
@@ -331,6 +332,7 @@ class PowerUp extends Phaser.Scene {
 	    	this.jumps = this.MAX_JUMPS; //set jump count to max
 	    	this.jumping = false; //set player to not jumping
 	    } else {
+            // this.player.setTexture('jumping'); 
             // this.player.anims.play('jump');
             // this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
@@ -340,6 +342,7 @@ class PowerUp extends Phaser.Scene {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
             // this.player.anims.play('jump', true);
+            this.player.setTexture('jumping'); 
 	    } 
 
         //if player is jumping and up arrow is pressed
