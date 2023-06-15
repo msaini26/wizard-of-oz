@@ -36,6 +36,9 @@ class Credits extends Phaser.Scene {
             fontSize: '20px',
             color: 'white',
             align: 'center',
+            // wordWrap: { 
+            //     width: 500
+            // },
             padding: {
                 top: 5,
                 bottom: 5,
@@ -66,20 +69,21 @@ class Credits extends Phaser.Scene {
         this.add.text(TEXT_X, 200, 'by SergeQuadrado: Pixabay', subConfig);
 
         this.add.text(TITLE_X, 250, 'Tileset:', subTitle);
-        this.add.text(TEXT_X, 250, 'INSERT HERE', subConfig);
+        this.add.text(TEXT_X, 250, 'https://pixelfrog-assets.itch-', subConfig);
+        this.add.text(TEXT_X, 275, '.io/pixel-adventure-1', subConfig);
 
-        this.add.text(TITLE_X, 300, 'Artwork:', subTitle);
-        this.add.text(TEXT_X, 300, '2D Pixel Art Witch Sprites', subConfig);
-        this.add.text(TEXT_X, 320, 'by Elthen: Itchio', subConfig);
+        this.add.text(TITLE_X, 325, 'Artwork:', subTitle);
+        this.add.text(TEXT_X, 325, '2D Pixel Art Witch Sprites', subConfig);
+        this.add.text(TEXT_X, 350, 'by Elthen: Itchio', subConfig);
 
-        this.add.text(TITLE_X, 350, 'Physics:', subTitle);
-        this.add.text(TEXT_X, 350, 'Mansi & Rebecca', subConfig);
-
-        this.add.text(TITLE_X, 400, 'Coding:', subTitle);
+        this.add.text(TITLE_X, 400, 'Physics:', subTitle);
         this.add.text(TEXT_X, 400, 'Mansi & Rebecca', subConfig);
+
+        this.add.text(TITLE_X, 450, 'Coding:', subTitle);
+        this.add.text(TEXT_X, 450, 'Mansi & Rebecca', subConfig);
         
-        this.add.text(TITLE_X, 450, 'Fonts:', subTitle);
-        this.add.text(TEXT_X, 450, 'Joystix by Raymond Larabie: Dafont', subConfig);
+        this.add.text(TITLE_X, 500, 'Fonts:', subTitle);
+        this.add.text(TEXT_X, 500, 'Joystix by Raymond Larabie: Dafont', subConfig);
 
         subConfig.color = '#FFFFFF';
         this.back = this.add.text(30, 30, 'Press ← to go Back', subConfig);

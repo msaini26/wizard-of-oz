@@ -57,7 +57,7 @@ let config = {
         }
     },
 
-    scene: [Title, Credits, Tornado, PowerUp, BossBattle, GameOver, Play],
+    scene: [Title, Credits, Controls, Tornado, PowerUp, BossBattle, GameOver, Play],
 }
 
 let game = new Phaser.Game(config) // create phaser game
