@@ -15,7 +15,7 @@ class Tornado extends Phaser.Scene {
         this.load.atlas("run", "./dorothy/png/run.png", "./dorothy/json/run.json");
         this.load.atlas("hit", "./player/hit.png", "./player/hit.json");
         this.load.atlas("idle", "./dorothy/png/idle.png", "./dorothy/json/idle.json");
-        this.load.atlas("jump", "./dorothy/png/jump.png", "./dorothy/json/jump.json");
+        this.load.atlas("jump", "./dorothy/png/other_jump.png", "./dorothy/json/other_jump.json");
         this.load.atlas("wallJump", "./player/wallJump.png", "./player/wallJump.json");
         this.load.atlas("doubleJump", "./player/doubleJump.png", "./player/doubleJump.json");
 
@@ -64,10 +64,10 @@ class Tornado extends Phaser.Scene {
         this.startGround.body.immovable = true; //set it so ground isn't affected by physics
         this.startGround.body.allowGravity = false; //set it so the ground doesn't fall 
 
-        // delay by 5 seconds and then destroy starting platform
-        this.time.delayedCall(5000, () => { 
-            this.startGround.destroy();
-        });
+        // // delay by 5 seconds and then destroy starting platform
+        // this.time.delayedCall(5000, () => { 
+        //     this.startGround.destroy();
+        // });
 
         //creating idle animation (when the player isn't moving)
         this.anims.create({
@@ -106,6 +106,7 @@ class Tornado extends Phaser.Scene {
             key: 'jump',
             frameRate: 3,
             frames: this.anims.generateFrameNames("jump", { 
+                prefix: 'sprite',
                 start: 1, 
                 end: 19 }),
             repeat: -1
