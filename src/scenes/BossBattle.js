@@ -169,13 +169,12 @@ class BossBattle extends Phaser.Scene {
                 this.player.anims.play('idle', true); //play idle animation
             }
     
-    
             //if the player is on a platform
             if(this.player.body.blocked.down) {
                 this.jumps = this.MAX_JUMPS; //set jump count to max
                 this.jumping = false; //set player to not jumping
             } else {
-                this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
+                // this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
             }
     
             //if up arrow key is pressed and we have not reached max jumps yet
