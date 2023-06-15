@@ -64,26 +64,30 @@ class Credits extends Phaser.Scene {
         const TEXT_X = 200;
 
          
-        this.add.text(TITLE_X, 180, 'Music:', subTitle);
-        this.add.text(TEXT_X, 180, 'Life of a Wandering Wizard', subConfig);
-        this.add.text(TEXT_X, 200, 'by SergeQuadrado: Pixabay', subConfig);
+        this.add.text(TITLE_X, 150, 'Music:', subTitle);
+        this.add.text(TEXT_X, 150, 'Life of a Wandering Wizard', subConfig);
+        this.add.text(TEXT_X, 175, 'by SergeQuadrado: Pixabay', subConfig);
 
-        this.add.text(TITLE_X, 250, 'Tileset:', subTitle);
-        this.add.text(TEXT_X, 250, 'https://pixelfrog-assets.itch-', subConfig);
-        this.add.text(TEXT_X, 275, '.io/pixel-adventure-1', subConfig);
+        this.add.text(TITLE_X, 225, 'Tileset:', subTitle);
+        this.add.text(TEXT_X, 225, 'https://pixelfrog-assets.itch-', subConfig);
+        this.add.text(TEXT_X, 250, '.io/pixel-adventure-1', subConfig);
 
-        this.add.text(TITLE_X, 325, 'Artwork:', subTitle);
-        this.add.text(TEXT_X, 325, '2D Pixel Art Witch Sprites', subConfig);
-        this.add.text(TEXT_X, 350, 'by Elthen: Itchio', subConfig);
+        this.add.text(TITLE_X, 300, 'Artwork:', subTitle);
+        this.add.text(TEXT_X, 300, '2D Pixel Art Witch Sprites', subConfig);
+        this.add.text(TEXT_X, 325, 'by Elthen: Itchio', subConfig);
 
-        this.add.text(TITLE_X, 400, 'Physics:', subTitle);
-        this.add.text(TEXT_X, 400, 'Mansi & Rebecca', subConfig);
+        this.add.text(TITLE_X, 375, 'Physics:', subTitle);
+        this.add.text(TEXT_X, 375, 'Mansi & Rebecca', subConfig);
 
-        this.add.text(TITLE_X, 450, 'Coding:', subTitle);
-        this.add.text(TEXT_X, 450, 'Mansi & Rebecca', subConfig);
+        this.add.text(TITLE_X, 425, 'Coding:', subTitle);
+        this.add.text(TEXT_X, 425, 'Mansi & Rebecca', subConfig);
         
-        this.add.text(TITLE_X, 500, 'Fonts:', subTitle);
-        this.add.text(TEXT_X, 500, 'Joystix by Raymond Larabie: Dafont', subConfig);
+        this.add.text(TITLE_X, 475, 'Fonts:', subTitle);
+        this.add.text(TEXT_X, 475, 'Joystix by Raymond Larabie: Dafont', subConfig);
+
+        this.add.text(TITLE_X, 525, 'Player:', subTitle);
+        this.add.text(TEXT_X, 525, 'https://legnops.itch.io/-', subConfig);
+        this.add.text(TEXT_X, 550, 'red-hood-character', subConfig);
 
         subConfig.color = '#FFFFFF';
         this.back = this.add.text(30, 30, 'Press ← to go Back', subConfig);

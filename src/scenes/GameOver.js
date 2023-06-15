@@ -33,7 +33,7 @@ class GameOver extends Phaser.Scene {
 
         //title text configuration
         let titleConfig = {
-            fontFamily: 'Helvetica Neue',
+            fontFamily: 'ka1',
             fontSize: '45px',
             fontStyle: 'bold',
             color: '#7a5f46',
@@ -45,7 +45,14 @@ class GameOver extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
+        if(hasWon){
+            this.add.text(game.config.width/2, game.config.height/2, 'You Won!', titleConfig).setOrigin(0.5);
+        } else {
+            this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
+        }
+
+        // this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
+        titleConfig.fontFamily = 'joystix';
         this.add.text(game.config.width/2, game.config.height/3, 'There is no place like home...', titleConfig).setOrigin(0.5).setScale(0.5);
 
 
@@ -54,7 +61,7 @@ class GameOver extends Phaser.Scene {
             fontFamily: 'joystix',
             fontSize: '30px',
             fontStyle: 'italic',
-            color: '#ffa8db',
+            color: '#070f59',
             padding: {
                 top: 5,
                 bottom: 5,

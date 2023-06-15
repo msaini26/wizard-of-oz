@@ -186,11 +186,20 @@ class BossBattle extends Phaser.Scene {
         this.wave_3 = false;
         this.wave_4 = false;
 
+        this.enemiesAddedDead = false;
+
     }
 
     // updates every frame
     update() {
         if(this.playerIsDead){
+            hasWon = false;
+            this.scene.start('gameOverScene');
+        }
+
+        if(this.enemiesAddedDead && this.flyingWitchIsDead && this.isDead){
+            // console.log('win');
+            hasWon = true;
             this.scene.start('gameOverScene');
         }
 
@@ -240,29 +249,29 @@ class BossBattle extends Phaser.Scene {
             }
         });
 
-        // add wave 2 of enemies
-        this.time.delayedCall(35000, () => {
-            if (!this.wave_2) {
-                this.add_more_enemies();
-                this.wave_2 = true;
-            }
-        });
+        // // add wave 2 of enemies
+        // this.time.delayedCall(35000, () => {
+        //     if (!this.wave_2) {
+        //         this.add_more_enemies();
+        //         this.wave_2 = true;
+        //     }
+        // });
 
-        // add wave 3 of enemies
-        this.time.delayedCall(50000, () => {
-            if (!this.wave_3) {
-                this.add_more_enemies();
-                this.wave_3 = true;
-            }
-        });
+        // // add wave 3 of enemies
+        // this.time.delayedCall(50000, () => {
+        //     if (!this.wave_3) {
+        //         this.add_more_enemies();
+        //         this.wave_3 = true;
+        //     }
+        // });
 
-        // add wave 4 of enemies
-        this.time.delayedCall(65000, () => {
-            if (!this.wave_4) {
-                this.add_more_enemies();
-                this.wave_4 = true;
-            }
-        });
+        // // add wave 4 of enemies
+        // this.time.delayedCall(65000, () => {
+        //     if (!this.wave_4) {
+        //         this.add_more_enemies();
+        //         this.wave_4 = true;
+        //     }
+        // });
 
         if(!this.isWaiting){
             // check if player collides with the walking witch        
@@ -306,11 +315,11 @@ class BossBattle extends Phaser.Scene {
 
         for (let i = 0; i < this.enemies.children.entries.length; i++) {
             // init witch in array of witches
-            console.log(this.enemies.children.entries[i]);
+            // console.log(this.enemies.children.entries[i]);
             let extra_witch = this.enemies.children.entries[i];
             if (extra_witch != null && !this.playerIsDead) { // make sure witch or player aren't gone
-                console.log(extra_witch);
-                console.log(this.player);
+                // console.log(extra_witch);
+                // console.log(this.player);
                 this.physics.moveTo(extra_witch, this.player.x, this.player.y, 30); // have enemy track the player
             }
         }
@@ -384,6 +393,10 @@ class BossBattle extends Phaser.Scene {
                     witch.body.checkCollision.right = false; 
                     this.time.delayedCall(2100, () => {
                         witch.destroy(); // destroy the witch
+                        console.log(this.enemies.children.entries.length);
+                        if(this.enemies.children.entries.length === 0){
+                            this.enemiesAddedDead = true;
+                        }
                     });
                 } else { // player killed by enemy
                     this.player.destroy();

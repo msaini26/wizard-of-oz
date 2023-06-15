@@ -96,3 +96,5 @@ let keyC;
 let introMusic;
 
 let hasPowerUp;
+
+let hasWon;
