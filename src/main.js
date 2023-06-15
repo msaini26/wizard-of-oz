@@ -21,23 +21,35 @@ Team Members: Mansi Saini & Rebecca Zhao
     that tell the player to destroy the witches.
 
 ✅ +5 The game is playable to completion by a player of moderate skill. If your game is purposefully difficult and you're concerned that the grader won't be able to evaluate it properly, please provide a "grader mode" or debug menu that will allow us to see everything you've made, along with instructions for how to access that mode.
+    - should be. We playtested the game a lot to make sure we fit this section because 
+    everyone has a different level
 
-+5 Your project and code are well-structured and organized, including legible comments, appropriate data structures, sensible prefabs, meaningful variable names, logical scene structures, etc. (Nathan's examples are a good baseline.)
+✅ +5 Your project and code are well-structured and organized, including legible comments, appropriate data structures, sensible prefabs, meaningful variable names, logical scene structures, etc. (Nathan's examples are a good baseline.)
+    - should be. at our code check, our TA mentioned that our code was well commented and organized
 
-+5 Your project has a well-maintained and updated GitHub page that shows meaningful contributions, commits, and milestones throughout the course of the project's history.
+✅ +5 Your project has a well-maintained and updated GitHub page that shows meaningful contributions, commits, and milestones throughout the course of the project's history.
+    - believe me, plentyyyy of commits - and plentttyyy of merge conflicts (don't worry they are resolved now)
 
 === CAMERA ===
 
-+10 Your game uses at least five of Phaser's major components (besides Scenes), which may include: physics systems, cameras, particle effects, text objects, the animation manager, the tween manager, timers, tilemaps, pipeline FX, etc. (Please list these components in your main.js file.)
+✅ +10 Your game uses at least five of Phaser's major components (besides Scenes), which may include: physics systems, cameras, particle effects, text objects, the animation manager, the tween manager, timers, tilemaps, pipeline FX, etc. (Please list these components in your main.js file.)
+    - Physics Systems: players dynamics - running, jumping, collision detection with chests and enemies, collision detection with tilemap, collision detection for player, etc
+    - Text Objects: bouncing text in title screen, directions, credits, fading text
+    - Animation: witch walking, witch flying, monkey flying, player running, etc
+    - Tween Manager: Fading text in the tornado level
+    - Timers: timer before safety platform falls, timer to move from tornado to power up level, timer for power ups falling, etc
+    - Tilemaps: all the terrains and backgrounds in the game
 
-+10 Your game has artistic cohesion, i.e. the art, sound, typography, etc. reflect your adaptation's aesthetic goals, your game is legible as a film adaptation, and your assets make sense together.
+✅ +10 Your game has artistic cohesion, i.e. the art, sound, typography, etc. reflect your adaptation's aesthetic goals, your game is legible as a film adaptation, and your assets make sense together.
+    - Yes, they all follow a pixel art cute, bright theme; fonts reflect that with the bounce and cute fonts and colors
 
-+10 Your game has mechanical cohesion, i.e. the mechanics reflect your adaptation's technical goals, the game controls and performs as expected, and the mechanics are well-implemented.
+✅ +10 Your game has mechanical cohesion, i.e. the mechanics reflect your adaptation's technical goals, the game controls and performs as expected, and the mechanics are well-implemented.
+    - Yes, the player's running, jumping, and witch dynamics all follow the same transitions of mechnical movement.
 
 === ACTION ===
 
-+5 Your game has that extra bit of polish, creativity, technical prowess, and/or originality that helps it stand out from other games. We use this criteria as a grade "tilt" to reward games that we really enjoyed, that are bold and inventive, that adapt their film thoughtfully, that demonstrate strong technical skills, and/or went beyond the stated objectives of the assignment. Feel free to add a comment to your main.js/Canvas submission if you wish to point out any features that we might miss.
-
+✅ +5 Your game has that extra bit of polish, creativity, technical prowess, and/or originality that helps it stand out from other games. We use this criteria as a grade "tilt" to reward games that we really enjoyed, that are bold and inventive, that adapt their film thoughtfully, that demonstrate strong technical skills, and/or went beyond the stated objectives of the assignment. Feel free to add a comment to your main.js/Canvas submission if you wish to point out any features that we might miss.
+    - hidden easter egg tornado that only happens if you are good enough in the first level with the jumping platforms
 
 
 */
