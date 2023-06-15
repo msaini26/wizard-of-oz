@@ -42,6 +42,22 @@ class Tornado extends Phaser.Scene {
         //adding background tile
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
 
+        //setting text configuration
+        let textConfig = {
+            fontFamily: 'joystix',
+            fontSize: '20px',
+            color: '#7a5f46',
+            align: 'center',
+            wordWrap: { 
+                width: game.config.width - 100
+            },
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+
+        this.directions = this.add.text(game.config.width/2, 50, "Jump as far as you can before you are swallowed by the tornado to Oz. Try triple jumping to help you out", textConfig).setOrigin(0.5);
 
         //keeps track of other colored platforms (different from player color)
         this.platformGroup = this.add.group({
@@ -64,10 +80,24 @@ class Tornado extends Phaser.Scene {
         this.startGround.body.immovable = true; //set it so ground isn't affected by physics
         this.startGround.body.allowGravity = false; //set it so the ground doesn't fall 
 
-        // // delay by 5 seconds and then destroy starting platform
-        // this.time.delayedCall(5000, () => { 
-        //     this.startGround.destroy();
-        // });
+        this.safety_net = this.add.text(game.config.width/2, 420, "Beware not all platforms are as they seem", textConfig).setOrigin(0.5).setInteractive();
+
+        // delay by 3.5 seconds and then fade out beware text
+        this.time.delayedCall(3500, () => { 
+            // fade beware text out
+            this.tweens.add({
+                targets: this.safety_net,
+                alpha: 0,
+                duration: 500,
+                ease: 'Power2'
+              }, this);
+
+        });
+        
+        // delay by 5 seconds and then destroy starting platform
+        this.time.delayedCall(5000, () => { 
+            this.startGround.destroy(); // bye bye safety net platform
+        });
 
         //creating idle animation (when the player isn't moving)
         this.anims.create({
@@ -104,12 +134,12 @@ class Tornado extends Phaser.Scene {
         //creating jumping animation
         this.anims.create({
             key: 'jump',
-            frameRate: 3,
+            frameRate: 15,
             frames: this.anims.generateFrameNames("jump", { 
                 prefix: 'sprite',
                 start: 1, 
                 end: 19 }),
-            repeat: -1
+            // repeat: -1
         });
 
         //creating event to increase speed as the player plays (increasing difficulty)
@@ -209,11 +239,12 @@ class Tornado extends Phaser.Scene {
         //     this.player.setTexture('jump'); //if player is not on platform, they are in the air i.e. jumping
 	    }
 
+        
+
         //if up arrow key is pressed and we have not reached max jumps yet
         if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
 	        this.player.body.velocity.y = this.JUMP_VELOCITY; //set player velocity used to jump
 	        this.jumping = true; //set jumping to true
-            this.player.anims.play('jump', true); // play jumping animation
 	    } 
 
         //if player is jumping and up arrow is pressed
