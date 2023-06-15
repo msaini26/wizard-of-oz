@@ -242,7 +242,7 @@ class PowerUp extends Phaser.Scene {
         //adding player
         this.player = this.physics.add.sprite(playerSpawn.x, playerSpawn.y, 'idle').setScale(2);
         this.player.anims.play('idle', true); 
-        this.player.body.setSize(this.player.width/1.5);  
+        // this.player.body.setSize(this.player.width/1.5);  
 
         //setting collision
         this.player.body.setCollideWorldBounds(true); //so player can't exit screen/bounds
