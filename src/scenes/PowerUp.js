@@ -34,6 +34,8 @@ class PowerUp extends Phaser.Scene {
         this.load.image('heart', './powerups/png/heart.png');
         this.load.image('fire', './powerups/png/fire.png');
 
+        this.load.audio('powerup_music', './assets/audio/adventure.mp3');
+
     }
 
     // create background and game elements
@@ -46,6 +48,19 @@ class PowerUp extends Phaser.Scene {
         this.physics.world.gravity.y = 3000;
         // this.itemSpeed = 200;
         // this.itemSpeedMax = 700;
+
+        // set music configurations
+        let musicConfig = {
+            mute: false,
+            volume: 1, 
+            loop: true, //looping music so it is never ending
+            rate: 1,
+            delay: 0 
+        };
+
+        // set background game music
+        this.powerMusic = this.sound.add('powerup_music', musicConfig);
+        this.powerMusic.play(musicConfig);
 
         //creating tilemap
         const map = this.add.tilemap('YellowBrickJSON');
@@ -363,6 +378,7 @@ class PowerUp extends Phaser.Scene {
                 this.chest4.destroy();
 
                 this.time.delayedCall(500, () => {
+                    this.sound.play('chimes'); 
                     chest.anims.play("chest1");
                 }, null, this);
 
@@ -384,6 +400,7 @@ class PowerUp extends Phaser.Scene {
                 this.chest4.destroy();
 
                 this.time.delayedCall(500, () => {
+                    this.sound.play('chimes'); 
                     chest.anims.play("chest2");
                 }, null, this);
 
@@ -405,6 +422,7 @@ class PowerUp extends Phaser.Scene {
                 this.chest4.destroy();
 
                 this.time.delayedCall(500, () => {
+                    this.sound.play('chimes'); 
                     chest.anims.play("chest3");
                 }, null, this);
 
@@ -426,6 +444,7 @@ class PowerUp extends Phaser.Scene {
                 this.chest3.destroy();
 
                 this.time.delayedCall(500, () => {
+                    this.sound.play('chimes'); 
                     chest.anims.play("chest4");
                 }, null, this);
 
@@ -520,7 +539,7 @@ class PowerUp extends Phaser.Scene {
             this.start.clearTint();
             //if sound hasn't played yet
             if(!this.clicked){
-                // this.sound.play('select'); //play sound effect
+                this.sound.play('sfx_select'); // play selector sound
                 this.clicked = true; //set boolean to true
                 // this.item = new Items(this, this.imgName);
                 // this.itemGroup.add(this.item); 
@@ -564,11 +583,11 @@ class PowerUp extends Phaser.Scene {
         
         //if mouse clicks text
         this.next.on('pointerdown', () => {
-            // console.log("clicked");
             this.next.clearTint();
             //if sound hasn't played yet
             if(!this.clicked){
-                // this.sound.play('select'); //play sound effect
+                this.sound.play('sfx_select'); // play selector sound
+                this.powerMusic.stop();
                 this.clicked = true; //set boolean to true
                 this.scene.start('bossBattleScene');
             }
@@ -598,6 +617,7 @@ class PowerUp extends Phaser.Scene {
     collidesItem() {
         this.physics.add.overlap(this.player, this.itemGroup, (player, item) =>{
             item.destroy();
+            this.sound.play('collect'); 
             this.score++;
             console.log(this.score);
         });

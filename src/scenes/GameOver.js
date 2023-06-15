@@ -46,8 +46,10 @@ class GameOver extends Phaser.Scene {
         }
 
         if(hasWon){
+            this.sound.play('win'); 
             this.add.text(game.config.width/2, game.config.height/2, 'You Won!', titleConfig).setOrigin(0.5);
         } else {
+            this.sound.play('lose'); 
             this.add.text(game.config.width/2, game.config.height/2, 'game over', titleConfig).setOrigin(0.5);
         }
 

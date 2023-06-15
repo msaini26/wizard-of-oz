@@ -28,6 +28,8 @@ class Tornado extends Phaser.Scene {
         // load in tornado animation
         // this.load.atlas("tornado", './transitions/tornado.png', './transitions/json/tornado.json');
         this.load.atlas("tornado", './transitions/temp.png', './transitions/json/temp.json');
+
+        this.load.audio('tornado_music', './assets/audio/cinematic.mp3');
     }
 
     create() {
@@ -40,6 +42,19 @@ class Tornado extends Phaser.Scene {
         this.physics.world.gravity.y = 3000;
         this.platformSpeed = -200;
         this.platformSpeedMax = -700;
+
+        // set music configurations
+        let musicConfig = {
+            mute: false,
+            volume: 1, 
+            loop: true, //looping music so it is never ending
+            rate: 1,
+            delay: 0 
+        };
+
+        // set background game music
+        this.tornadoMusic = this.sound.add('tornado_music', musicConfig);
+        this.tornadoMusic.play(musicConfig);
 
         //adding background tile
         this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'background').setOrigin(0);
@@ -168,7 +183,12 @@ class Tornado extends Phaser.Scene {
                 this.playTornado();
             }
             if(this.tornado.x > game.config.width - 400){
-                this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
+                this.time.delayedCall(1000, () => { 
+                    this.wind.stop();
+                    this.tornadoMusic.stop();
+                    this.scene.start('powerUpScene'); 
+                }); //delay start of game over scene by 1 second
+                // this.wind.stop();
             }
             // this.playTornado();
             // this.time.delayedCall(1000, () => { this.scene.start('powerUpScene'); }); //delay start of game over scene by 1 second
@@ -250,6 +270,19 @@ class Tornado extends Phaser.Scene {
     }
 
     playTornado() {
+        // set music configurations
+        let tornadoConfig = {
+            mute: false,
+            volume: 1.5, 
+            loop: false, //looping music so it is never ending
+            rate: 2,
+            delay: 0 
+        };
+
+        // set background game music
+        this.wind = this.sound.add('wind', tornadoConfig);
+        this.wind.play(tornadoConfig);
+        // this.sound.play('wind');
         this.tornado.anims.play('spinning-tornado');
         this.tornado.setVelocityX(200);
         this.isPlaying = true;
@@ -258,6 +291,8 @@ class Tornado extends Phaser.Scene {
     checkTornadoCollide(){
         this.physics.add.collider(this.player, this.tornado, (player, tornado) =>{
             this.time.delayedCall(1000, () => { 
+                this.wind.stop();
+                this.tornadoMusic.stop();
                 this.scene.start('powerUpScene'); 
             });
         });

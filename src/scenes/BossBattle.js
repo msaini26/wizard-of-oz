@@ -14,9 +14,11 @@ class BossBattle extends Phaser.Scene {
 
          // load texture atlas
          this.load.atlas('witch', 'enemy/witch.png', 'enemy/witch.json'); // import witch walking texture atlas
-         this.load.atlas('boss-monkey', 'enemy/monkey.png', 'enemy/monkey.json'); // import monkey texture atlas
+        //  this.load.atlas('boss-monkey', 'enemy/monkey.png', 'enemy/monkey.json'); // import monkey texture atlas
 
          this.load.image('jumping','./dorothy/png/jump1.png');
+
+         this.load.audio('battle_music', './assets/audio/risk.mp3');
 
     }
 
@@ -31,6 +33,19 @@ class BossBattle extends Phaser.Scene {
         this.physics.world.gravity.y = 3000;
         this.platformSpeed = -200;
         this.platformSpeedMax = -700;
+
+        // set music configurations
+        let musicConfig = {
+            mute: false,
+            volume: 1, 
+            loop: true, //looping music so it is never ending
+            rate: 1,
+            delay: 0 
+        };
+
+        // set background game music
+        this.battleMusic = this.sound.add('battle_music', musicConfig);
+        this.battleMusic.play(musicConfig);
 
         //creating tilemap
         const map = this.add.tilemap('battleJSON');
@@ -116,21 +131,21 @@ class BossBattle extends Phaser.Scene {
             repeat: -1,
         });
 
-        // monkey flying 
-        this.anims.create({
-            key: 'monkey-flying',
-            frameRate: 6,
-            frames: this.anims.generateFrameNames("boss-monkey", { 
-                prefix: 'sprite',
-                start: 1, 
-                end: 8 }),
-        });
+        // // monkey flying 
+        // this.anims.create({
+        //     key: 'monkey-flying',
+        //     frameRate: 6,
+        //     frames: this.anims.generateFrameNames("boss-monkey", { 
+        //         prefix: 'sprite',
+        //         start: 1, 
+        //         end: 8 }),
+        // });
 
         // create monkey animation
-        this.monkey = this.physics.add.sprite(650, 505, 'boss-monkey').setScale(2.5);
-        this.monkey.body.immovable = true; 
-        this.monkey.body.allowGravity = false;
-        this.monkey.anims.play('monkey-flying');
+        // this.monkey = this.physics.add.sprite(650, 505, 'boss-monkey').setScale(2.5);
+        // this.monkey.body.immovable = true; 
+        // this.monkey.body.allowGravity = false;
+        // this.monkey.anims.play('monkey-flying');
     
         this.isWaiting = true;
 
@@ -194,12 +209,14 @@ class BossBattle extends Phaser.Scene {
     update() {
         if(this.playerIsDead){
             hasWon = false;
+            this.battleMusic.stop();
             this.scene.start('gameOverScene');
         }
 
         if(this.enemiesAddedDead && this.flyingWitchIsDead && this.isDead){
             // console.log('win');
             hasWon = true;
+            this.battleMusic.stop();
             this.scene.start('gameOverScene');
         }
 
@@ -249,21 +266,21 @@ class BossBattle extends Phaser.Scene {
             }
         });
 
-        // // add wave 2 of enemies
-        // this.time.delayedCall(35000, () => {
-        //     if (!this.wave_2) {
-        //         this.add_more_enemies();
-        //         this.wave_2 = true;
-        //     }
-        // });
+        // add wave 2 of enemies
+        this.time.delayedCall(35000, () => {
+            if (!this.wave_2) {
+                this.add_more_enemies();
+                this.wave_2 = true;
+            }
+        });
 
-        // // add wave 3 of enemies
-        // this.time.delayedCall(50000, () => {
-        //     if (!this.wave_3) {
-        //         this.add_more_enemies();
-        //         this.wave_3 = true;
-        //     }
-        // });
+        // add wave 3 of enemies
+        this.time.delayedCall(50000, () => {
+            if (!this.wave_3) {
+                this.add_more_enemies();
+                this.wave_3 = true;
+            }
+        });
 
         // // add wave 4 of enemies
         // this.time.delayedCall(65000, () => {
@@ -336,6 +353,7 @@ class BossBattle extends Phaser.Scene {
                 witch.body.checkCollision.up = false; 
                 witch.body.checkCollision.left = false; 
                 witch.body.checkCollision.right = false; 
+                this.sound.play('pop');
                 this.time.delayedCall(2100, () => {
                     witch.destroy(); // destroy the witch
                 });
@@ -360,6 +378,7 @@ class BossBattle extends Phaser.Scene {
                 witch.body.checkCollision.up = false; 
                 witch.body.checkCollision.left = false; 
                 witch.body.checkCollision.right = false; 
+                this.sound.play('pop');
                 this.time.delayedCall(2100, () => {
                     witch.destroy(); // destroy the witch
                     this.enemies_left -= 1; // remove one enemy
@@ -391,6 +410,7 @@ class BossBattle extends Phaser.Scene {
                     witch.body.checkCollision.up = false; 
                     witch.body.checkCollision.left = false; 
                     witch.body.checkCollision.right = false; 
+                    this.sound.play('pop');
                     this.time.delayedCall(2100, () => {
                         witch.destroy(); // destroy the witch
                         console.log(this.enemies.children.entries.length);

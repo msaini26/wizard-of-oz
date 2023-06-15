@@ -89,8 +89,10 @@ class Controls extends Phaser.Scene {
             //if sound effect hasn't played yet
             if(!this.clicked){
                 // this.sound.play('chimes'); //play sound
+                this.sound.play('sfx_select'); // play selector sound
                 this.clicked = true; //set clicked to true
             }
+            introMusic.stop(); //stop playing sound
 
             //move to next scene
             this.scene.start('tornadoScene');

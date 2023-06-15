@@ -13,6 +13,20 @@ class Title extends Phaser.Scene {
         // select key
         this.load.audio('sfx_select', './assets/audio/select.mp3');
 
+        //other level music
+        this.load.audio('tornado_music', './assets/audio/cinematic.mp3');
+        this.load.audio('powerup_music', './assets/audio/adventure.mp3');
+        this.load.audio('battle_music', './assets/audio/risk.mp3');
+
+        //other sound effects
+        this.load.audio('chimes', './assets/audio/chimes.mp3');
+        this.load.audio('collect', './assets/audio/collect.mp3');
+        this.load.audio('lose', './assets/audio/lose.mp3');
+        this.load.audio('win', './assets/audio/win.mp3');
+        this.load.audio('wind', './assets/audio/wind.mp3');
+        this.load.audio('pop', './assets/audio/pop.mp3');
+
+
     }
 
     create(){
