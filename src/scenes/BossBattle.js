@@ -14,6 +14,7 @@ class BossBattle extends Phaser.Scene {
 
          // load texture atlas
          this.load.atlas('witch', 'enemy/witch.png', 'enemy/witch.json'); // import witch walking texture atlas
+         this.load.atlas('boss-monkey', 'enemy/monkey.png', 'enemy/monkey.json'); // import monkey texture atlas
 
     }
 
@@ -104,6 +105,23 @@ class BossBattle extends Phaser.Scene {
                 end: 42 }),
             repeat: -1,
         });
+
+        // monkey flying 
+        this.anims.create({
+            key: 'monkey-flying',
+            frameRate: 6,
+            frames: this.anims.generateFrameNames("boss-monkey", { 
+                prefix: 'sprite',
+                start: 1, 
+                end: 8 }),
+        });
+
+        // create monkey animation
+        this.monkey = this.physics.add.sprite(650, 505, 'boss-monkey').setScale(2.5);
+        this.monkey.body.immovable = true; 
+        this.monkey.body.allowGravity = false;
+        this.monkey.anims.play('monkey-flying');
+
 
         // create witch animation
         this.witch = this.physics.add.sprite(350, 505, 'witch').setScale(2.5);
