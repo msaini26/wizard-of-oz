@@ -518,6 +518,7 @@ class PowerUp extends Phaser.Scene {
             this.next = this.add.text(game.config.width/2, 160, 'NEXT', textConfig).setOrigin(0.5);
             this.next.setInteractive();
             this.checkNext = true;
+            hasPowerUp = false;
         } else { //otherwise, player continues with powerup scene and collects items
             this.start = this.add.text(game.config.width/2, 160, 'START', textConfig).setOrigin(0.5);
             this.start.setInteractive();
