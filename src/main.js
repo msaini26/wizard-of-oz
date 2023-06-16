@@ -1,6 +1,10 @@
 /*
 Team Members: Mansi Saini & Rebecca Zhao
 
+*****note*****
+- you may need to click to another tab and then click back to the game tab for the jump key to process (I don't know how to fix this)
+
+
 === LIGHTS ===
 
 ✅ +5 The game runs/executes without critical errors or crashes. (Graders will use Chrome, so be sure you game works in that browser.)
