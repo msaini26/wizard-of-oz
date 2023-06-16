@@ -8,7 +8,7 @@ class Credits extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/audio/select.mp3');
 
         // load credits background
-        this.load.image('credits_background', './assets/Background/2.png');
+        this.load.image('credits_background', './assets/background/2.png');
     }
 
     create() {

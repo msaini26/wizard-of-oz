@@ -21,7 +21,7 @@ class Tornado extends Phaser.Scene {
         this.load.image('jumping','./dorothy/png/jump1.png');
 
         //loading background
-        this.load.image('background','./background/background.png');
+        this.load.image('background','./background/Background.png');
 
         this.load.image("brick", "./terrain/brick.png");
         
